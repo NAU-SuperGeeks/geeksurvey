@@ -26,7 +26,7 @@ SECRET_KEY = config("GEEKSURVEY_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['webapps-dev.ac.nau.edu']
 
 
 # Application definition
