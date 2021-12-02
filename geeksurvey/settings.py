@@ -24,9 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("GEEKSURVEY_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool( int( config("GEEKSURVEY_DEBUG") ) )
+print("DEBUG  : " + str(DEBUG))
 
-ALLOWED_HOSTS = ['webapps-dev.ac.nau.edu']
+ALLOWED_HOSTS = [
+    'webapps-dev.ac.nau.edu',
+]
+
+if DEBUG: ALLOWED_HOSTS.append('localhost')
 
 
 # Application definition

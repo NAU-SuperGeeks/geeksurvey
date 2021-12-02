@@ -18,7 +18,8 @@ from django.urls import path
 
 from . import views
 
+rooturl = 'geeksurvey-dev/'
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
+    path(rooturl+'admin/', admin.site.urls),
+    path(rooturl, views.index, name='index'),
 ]
