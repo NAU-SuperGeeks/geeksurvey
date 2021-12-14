@@ -1,0 +1,74 @@
+@media only screen and (max-width: 600px) {
+  body {
+    margin:auto;
+    }   
+  div.content {
+    max-width:80% !important;
+    }   
+}
+
+body {
+  background-color:#444;
+}
+div.content {
+  background-color:white;
+  padding:1em;
+  max-width:70%;
+  text-align:center;
+  margin:auto;
+  border-radius:1em;
+  margin-bottom:1em;
+}
+form {
+  text-align:left;
+}
+button {
+  padding:1em;
+}
+
+img.fjord {
+  width:100%;
+  border-radius:8px;
+}
+
+img.corner_logo {
+  width:64px;
+  height:64px;
+  float:left;
+}
+
+h1.gs_title {
+  margin:16px 15%;
+}
+
+nav {
+  padding:4px;
+  border-radius:4px;
+}
+nav a {
+  display:inline-block;
+  color:black;
+  text-decoration:none;
+  padding:1em;
+  background:#ddd;
+  border-radius:4px;
+  margin:3px 0px;
+}
+nav a:hover {
+  background:#bbb;
+}
+
+.content.bottom {
+  background-color:#222;
+}
+.content.bottom a{
+  color:grey;
+  text-decoration:none;
+  margin:0px 10px;
+}
+.content.bottom a:hover{
+  color:white;
+  text-decoration:none;
+  margin:0px 10px;
+}
+

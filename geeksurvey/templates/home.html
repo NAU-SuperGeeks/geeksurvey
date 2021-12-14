@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<p> A tool for facilitating software engineering research. </p>
+<hr>
+<h3> Data pulled from DB: </h3>
+  {% if example_list %}
+  <ul>
+  {% for example in example_list%}
+  <li><p>{{ example.example_text }}</p></li>
+  {% endfor %}
+  </ul>
+  {% else %}
+  <p>No data available.</p>
+  {% endif %}
+
+  <hr>
+
+{% if user.is_authenticated %}
+  Hi {{ user.username }}!
+  <a href="{% url 'logout' %}">Log Out</a>
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">Log In</a>
+  <a href="{% url 'register' %}">Sign Up</a>
+{% endif %}
+
+{% endblock %}
+

@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title> GeekSurvey </title>
+
+<link rel="shortcut icon" href="{% static 'gkslogo.png' %}" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+
+<div class="content">
+  <a href="/">
+    <img class="corner_logo" src="{% static 'gkslogo.png' %}">
+  </a>
+  <h1 class="gs_title"> GeekSurvey </h1>
+  <!--
+  <nav>
+    <a href="working.html">Check Sample</a>
+    <a href="working.html">How It Works</a>
+    <a href="working.html">Pricing</a>
+    <a href="working.html">Participants</a>
+  </nav>
+  -->
+</div>
+
+<div class="content">
+    {% block content %}
+	  {% endblock %}	
+</div>
+
+<div class="content bottom">
+  <a href="working.html"> About </a>
+  <a href="working.html"> Legal and Licenses </a>
+  <a href="working.html"> Source Code </a>
+  <a href="working.html"> Help </a>
+</div>
+
+
+</body>
+</html>
+
