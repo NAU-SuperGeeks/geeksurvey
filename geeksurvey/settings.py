@@ -31,6 +31,7 @@ print("DEBUG  : " + str(DEBUG))
 
 ALLOWED_HOSTS = [
     'webapps-dev.ac.nau.edu',
+    '127.0.0.1',  # DEV ONLY
 ]
 
 if DEBUG: ALLOWED_HOSTS.append('localhost')
@@ -45,7 +46,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'geeksurvey'
+    'geeksurvey',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+]
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS= [
+   'django.contrib.auth.backends.ModelBackend',
+   'allauth.account.auth_backends.AuthenticationBackend'
 ]
 
 MIDDLEWARE = [

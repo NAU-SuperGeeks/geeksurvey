@@ -8,6 +8,8 @@
 }
 
 body {
+  background-repeat:repeat;
+  background-image:url("space.jpeg");
   background-color:#444;
 }
 div.content {
@@ -29,6 +31,10 @@ button {
 img.fjord {
   width:100%;
   border-radius:8px;
+}
+
+img.user-avatar {
+  width:20%;
 }
 
 img.corner_logo {
