@@ -22,7 +22,7 @@ EMAIL_HOST_USER = config("GMAIL_APP_USERNAME")
 EMAIL_HOST_PASSWORD = config("GMAIL_APP_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'default from email'
+DEFAULT_FROM_EMAIL = 'GeekSurvey Dev'
 
 # allauth config
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
@@ -70,6 +70,7 @@ print("DEBUG  : " + str(DEBUG))
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
+    'geeksurvey.xyz',
 ]
 
 # Application definition
