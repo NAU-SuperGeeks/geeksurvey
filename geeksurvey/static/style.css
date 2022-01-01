@@ -12,7 +12,7 @@ body {
   background-image:url("space.jpeg");
   background-color:#444;
 }
-div.content {
+div.crblock{
   background-color:white;
   padding:1em;
   max-width:70%;
@@ -64,15 +64,15 @@ nav a:hover {
   background:#bbb;
 }
 
-.content.bottom {
+div.bottom {
   background-color:#222;
 }
-.content.bottom a{
+div.bottom a{
   color:grey;
   text-decoration:none;
   margin:0px 10px;
 }
-.content.bottom a:hover{
+div.bottom a:hover{
   color:white;
   text-decoration:none;
   margin:0px 10px;
