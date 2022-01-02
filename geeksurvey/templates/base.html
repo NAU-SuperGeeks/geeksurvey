@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
 {% block extra_head %}
 {% endblock %}
 
@@ -21,9 +22,16 @@
       <img class="corner_logo" src="{% static 'gkslogo.png' %}">
     </a>
     <h1 class="gs_title"> GeekSurvey </h1>
+  <nav>
+  <a href="/">Home</a>
+  <a href="{% url 'profile' %}">Profile</a>
+  <a href="">Research</a>
+  <a href="">Participate</a>
+  </nav>
   </div>
 
   <div class="crblock content">
+
   {% block precontent %}
   {% endblock %}
 
@@ -37,10 +45,9 @@
   </div>
 
   <div class="crblock bottom">
-    <a href="working.html"> About </a>
-    <a href="working.html"> Legal and Licenses </a>
-    <a href="working.html"> Source Code </a>
     <a href="working.html"> Help </a>
+    <a href="https://ceias.nau.edu/capstone/projects/CS/2022/SuperGeeks/"> About </a>
+    <a href="https://github.com/NAU-SuperGeeks/geeksurvey"> Source Code </a>
   </div>
 
 </body>

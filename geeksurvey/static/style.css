@@ -2,8 +2,8 @@
   body {
     margin:auto;
     }   
-  div.content {
-    max-width:80% !important;
+  div.crblock {
+    max-width:100% !important;
     }   
 }
 
@@ -12,6 +12,7 @@ body {
   background-image:url("space.jpeg");
   background-color:#444;
 }
+
 div.crblock{
   background-color:white;
   padding:1em;
@@ -22,6 +23,9 @@ div.crblock{
   margin-bottom:1em;
 }
 form {
+  text-align:left;
+}
+div.accounts_base{
   text-align:left;
 }
 button {
@@ -55,7 +59,7 @@ nav a {
   display:inline-block;
   color:black;
   text-decoration:none;
-  padding:1em;
+  padding:.5em 1em;
   background:#ddd;
   border-radius:4px;
   margin:3px 0px;

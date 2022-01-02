@@ -16,4 +16,12 @@ def index(request):
 def working(request):
   context = {}
   return render(request, 'working.html', context)
+  
+def help(request):
+  context = {}
+  return render(request, 'help.html', context)
+
+def profile(request):
+  context = {}
+  return render(request, 'profile.html', context)
 

@@ -1,12 +1,51 @@
 {% extends "base.html" %}
     
     {% block extra_head %}
+      <style>
+        .accounts_menu a:hover {
+          background-color:#bbb;
+        }
+        .accounts_menu a {
+          text-decoration:none;
+          color:black;
+          background-color:#ddd;
+          padding:.5em;
+          border-radius:3px;
+        }
+        .accounts_menu li {
+          display:inline;
+        }
+        .accounts_menu ul {
+          list-style-type: none;
+          margin: 1.5em;
+          padding: 0;
+        }
+
+        .socialaccount_providers a:hover {
+          background-color:#bbb;
+        }
+        .socialaccount_providers a {
+          text-decoration:none;
+          color:black;
+          background-color:#ddd;
+          padding:.5em 10%;
+          border-radius:3px;
+        }
+        .socialaccount_providers li {
+          display:inline;
+        }
+        ul.socialaccount_providers {
+          margin: 1em 0em;
+          padding: 0;
+        }
+
+      </style>
     {% endblock %}
 
     {% block precontent %}
 
     {% if messages %}
-    <div>
+    <div class="accounts_base">
       <strong>Messages:</strong>
       <ul>
         {% for message in messages %}
@@ -14,10 +53,11 @@
         {% endfor %}
       </ul>
     </div>
+    <hr>
     {% endif %}
 
-    <div>
-      <strong>Menu:</strong>
+    <div class="accounts_menu">
+      <strong>Account Menu</strong>
       <ul>
         {% if user.is_authenticated %}
         <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
@@ -28,6 +68,7 @@
         {% endif %}
       </ul>
     </div>
+    <hr>
 
     {% endblock %}
 
