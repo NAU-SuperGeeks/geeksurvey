@@ -50,6 +50,7 @@ SOCIALACCOUNT_PROVIDERS = {
     'github': {
         'SCOPE': [
             'profile',
+            'email',
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
