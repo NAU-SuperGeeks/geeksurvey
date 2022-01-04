@@ -15,6 +15,10 @@ from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = bool( int( config("GEEKSURVEY_DEBUG") ) )
+print("DEBUG  : " + str(DEBUG))
+
 # email stuff
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -28,6 +32,7 @@ DEFAULT_FROM_EMAIL = 'GeekSurvey Dev'
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+if DEBUG: ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400 # 1 day in seconds
 ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/'
@@ -64,10 +69,6 @@ SOCIALACCOUNT_PROVIDERS = {
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("GEEKSURVEY_SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool( int( config("GEEKSURVEY_DEBUG") ) )
-print("DEBUG  : " + str(DEBUG))
-
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
@@ -89,6 +90,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.google',
+    'crispy_forms',
 ]
 
 SITE_ID = 1

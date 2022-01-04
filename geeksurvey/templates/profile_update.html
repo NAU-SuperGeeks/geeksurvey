@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1> Update Profile </h1>
+
+<div>
+<h2 class="account-heading">{{ user.username }}</h2>
+{% load socialaccount %}
+
+{% if user.socialaccount_set.all.0.get_avatar_url is defined %}
+  <img class="user-avatar" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" />
+{% else %}
+  <img class="user-avatar" src="{% static 'pfp_participant.png' %}" />
+{% endif %}
+
+<p class="text-secondary">{{ user.email }}</p>
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+<fieldset class="form-group">
+    <legend class="border-bottom mb-4">Profile Info</legend>
+    {{ u_form|crispy }} <!-- User form -->
+    {{ p_form|crispy }} <!-- Profile form -->
+</fieldset>
+<div class="form-group">
+    <button class="btn btn-outline-info" type="submit">Update</button>
+</div>
+
+
+{% endblock %}
+

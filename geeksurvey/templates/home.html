@@ -6,33 +6,18 @@
 
 {% if user.is_authenticated %}
   <p>Hi {{ user.username }}!</p>
-  {% load socialaccount %}
-  <img class="user-avatar" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" />
-  <p><a href="{% url 'profile' %}">complete your profile</a></p>
+  <p><a href="{% url 'profile_update' %}">complete your profile</a></p>
   <p> <a href=""> find studies </a> </p>
   <p> <a href=""> create a study </a> </p>
   <hr>
   <p> <a href="{% url 'account_logout' %}"> log out </a> </p>
 {% else %}
 <p> A tool for facilitating software engineering research. </p>
-<img class='fjord' src="{% static 'gs_fjord.png' %}">
-  <p>Oh... you're not logged in :(</p>
+  <img class='fjord' src="{% static 'gs_fjord.png' %}">
+  <br><br>
   <a href="{% url 'account_login' %}">log in</a><br>
   <a href="{% url 'account_signup' %}">sign up</a>
 {% endif %}
-
-<hr>
-<h3> Data pulled from DB: </h3>
-  {% if example_list %}
-  <ul>
-  {% for example in example_list%}
-  <li><p>{{ example.example_text }}</p></li>
-  {% endfor %}
-  </ul>
-  {% else %}
-  <p>No data available.</p>
-  {% endif %}
-
 
 {% endblock %}
 

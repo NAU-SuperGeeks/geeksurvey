@@ -24,6 +24,7 @@ urlpatterns = [
     path('working.html', views.working, name='working'),
     path('help/', views.help, name='help'),
     path('profile/', views.profile, name='profile'),
+    path('profile/update/', views.profile_update, name='profile_update'),
     path('accounts/', include('allauth.urls')),
 ]
 
