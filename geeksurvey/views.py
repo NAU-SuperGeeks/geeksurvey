@@ -28,7 +28,6 @@ def help(request):
 def profile(request):
   profile = Profile.objects.get(user=request.user)
   context={'profile':profile}
-  print(profile.bio)
   return render(request, 'profile.html', context)
 
 @login_required
