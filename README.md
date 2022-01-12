@@ -1,4 +1,4 @@
 # GeekSurvey
-
-Pengfei
-
+## Developers
+* Gustavo Valencia
+* Pengfei
