@@ -3,3 +3,4 @@
 * Gustavo Valencia
 * Kyle Austria
 * Pengfei
+* Tim Giroux
