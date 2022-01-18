@@ -19,6 +19,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # avatar = models.ImageField(default='/static/pfp_participant.png')
     bio = models.TextField(max_length=200)
+    age = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.username
