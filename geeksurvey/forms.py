@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
+from .models import Study
 
 
 class UserRegisterForm(UserCreationForm):
@@ -11,7 +12,6 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
-# Create a UserUpdateForm to update username and email
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
 
@@ -19,8 +19,13 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['username', 'email']
 
-# Create a ProfileUpdateForm to update image
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['bio','age', 'user_exp', 'level_of_education', 'occupation']
+        fields = ['bio', 'age', 'user_exp', 'level_of_education', 'occupation']
+
+class StudyUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Study
+        exclude = ['last_modified', 'enrolled', 'completed', 'owner', 'expiry_date']
+

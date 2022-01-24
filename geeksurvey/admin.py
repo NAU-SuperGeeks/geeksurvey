@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from .models import Example
+from .models import Study
 from .models import Profile
 
-admin.site.register(Example)
+admin.site.register(Study)
 admin.site.register(Profile)
 

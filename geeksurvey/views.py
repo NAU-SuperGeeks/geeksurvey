@@ -5,18 +5,21 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
+from datetime import datetime, timedelta
 
-from .models import Example
+from .models import Study
 from .models import Profile
 
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from .forms import *
 
 def index(request):
+  '''
   example_list = Example.objects.order_by('-pub_date')[:5]
   context = {
     'example_list': example_list,
   }
-  return render(request, 'home.html', context)
+  '''
+  return render(request, 'home.html')
 
 def working(request):
   return render(request, 'working.html')
@@ -55,4 +58,41 @@ def profile_update(request):
   }
 
   return render(request, 'profile_update.html', context)
+
+@login_required
+def research_dashboard(request):
+  profile = Profile.objects.get(user=request.user)
+
+  # show existing studies created by the user
+  studies = Study.object.get(owner=request.user)
+  context = {'profile':profile,
+             'studies':studies}
+  return render(request, 'research.html', context)
+
+@login_required
+def study_create(request):
+  profile = Profile.objects.get(user=request.user)
+  if request.method == 'POST':
+    study_form = StudyUpdateForm(request.POST, instance=request.user)
+    if study_form.is_valid():
+      s_title  = study_form.cleaned_data['title']
+      s_descr  = study_form.cleaned_data['description']
+      s_code   = study_form.cleaned_data['completion_code']
+      s_survey = study_form.cleaned_data['survey_url']
+      study = Study(owner=request.user,
+                    title=s_title,
+                    description=s_descr,
+                    completion_code=s_code,
+                    survey_url=s_survey,
+                    last_modified=datetime.now(),
+                    expiry_date=datetime.now()+timedelta(days=365))
+      study.save()
+
+      messages.success(request, f'Your study has been created!')
+      return redirect('profile')  # TODO redirect to research dashboard or study view page
+  else:
+    study_form = StudyUpdateForm(instance=Study())
+  context={'profile':profile,
+           'study_form':study_form}
+  return render(request, 'study_create.html', context)
 
