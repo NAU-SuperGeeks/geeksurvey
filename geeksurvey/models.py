@@ -6,12 +6,31 @@ from django.utils import timezone
 # Allows for enumerated types
 from django.utils.translation import gettext_lazy as _
 
-class Example(models.Model):
-    example_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
+class Study(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField(max_length=400)
+    last_modified = models.DateTimeField(auto_now_add=True)
+    expiry_date = models.DateTimeField('expiry date')
+
+    owner = models.ForeignKey(User,
+                              related_name="owner",
+                              unique=False,
+                              on_delete=models.CASCADE)
+
+    enrolled = models.ManyToManyField(User,
+                                 related_name="enrolled",
+                                 blank=True)
+
+    completed = models.ManyToManyField(User,
+                                 related_name="completed",
+                                 blank=True)
+
+    completion_code = models.TextField(max_length=32)
+
+    survey_url = models.URLField(max_length=200)
 
     def __str__(self):
-      return self.example_text
+      return self.title
 
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
