@@ -49,7 +49,7 @@ class Profile(models.Model):
     bio = models.TextField(max_length=200)
     age = models.PositiveSmallIntegerField(default=0)
     years_of_experience = models.PositiveSmallIntegerField(default=0)
-    balance = models.DecimalField(default=0, max_digits=17, decimal_places=2)
+    balance = models.DecimalField(default=0, max_digits=USD_MAX_DIGITS, decimal_places=USD_DECIMAL_NUM)
 
     # Defines choices in the Profile model class as recommended by Django Docs
     class LevelOfEducation(models.TextChoices):
