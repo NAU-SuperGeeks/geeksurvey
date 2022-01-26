@@ -12,6 +12,16 @@ from .models import Profile
 
 from .forms import *
 
+def study_landing_page(request, study_id):
+    study = get_object_or_404(Study, pk=study_id)
+    owner_profile = Profile.objects.get(user=study.owner)
+    context = {
+        'study':study,
+        'owner_profile':owner_profile,
+    }
+    return render(request, 'study_landing_page.html', context)
+
+
 def index(request):
   '''
   example_list = Example.objects.order_by('-pub_date')[:5]
@@ -87,6 +97,7 @@ def study_create(request):
       s_code   = study_form.cleaned_data['completion_code']
       s_survey = study_form.cleaned_data['survey_url']
       s_comp   = study_form.cleaned_data['compensation']
+
       study = Study(owner=request.user,
                     title=s_title,
                     description=s_descr,

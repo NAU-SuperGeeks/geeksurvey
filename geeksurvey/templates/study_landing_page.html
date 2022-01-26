@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_head %}
+<style>
+  .content {
+    text-align:left !important;
+  }
+</style>
+
+{% endblock %}
+
+{% block content %}
+  <h1> Study </h1>
+  <hr>
+  <h3> Title: {{study.title}} </h3>
+  <p> Description: {{study.description}} </p>
+  <p> Owner: {{study.owner}} </p>
+  <p> Owner Bio: {{owner_profile.bio}} </p>
+  <a href= "{% url 'working' %}">Enroll</a><br>
+
+{% endblock %}
