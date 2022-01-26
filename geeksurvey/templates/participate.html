@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_head %}
+<style>
+  div.studyPreview {
+    display: inline-block;
+    text-align: left;
+    background-color:#eee;
+    padding:1em;
+    margin:1em;
+    border-radius:1em;
+  }
+
+  div.studyPreview:hover {
+    background-color:#dfd;
+  }
+
+  a.studyPreview {
+    color:black;
+    text-decoration:none;
+  }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+{% for study in all_studies %}
+
+<a href="{% url 'working' %}" class='studyPreview'>
+<div class='studyPreview'>
+  <h3> {{study.title}} </h3>
+  <p> {{study.description}} </p>
+  <p> {{study.owner}} </p>
+</div>
+
+</a>
+{% endfor %}
+
+{% endblock %}

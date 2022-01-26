@@ -7,7 +7,7 @@
 {% if user.is_authenticated %}
   <p>Hi {{ user.username }}!</p>
   <p><a href="{% url 'profile_update' %}">complete your profile</a></p>
-  <p> <a href=""> find studies </a> </p>
+  <p> <a href="{% url 'participate' %}"> find studies </a> </p>
   <p> <a href="{% url 'study_create' %}"> create a study </a> </p>
   <hr>
   <p> <a href="{% url 'account_logout' %}"> log out </a> </p>
@@ -20,4 +20,3 @@
 {% endif %}
 
 {% endblock %}
-

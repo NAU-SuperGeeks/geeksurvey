@@ -27,6 +27,13 @@ def working(request):
 def help(request):
   return render(request, 'help.html')
 
+def participate(request):
+    all_studies = Study.objects.all()
+    context = {
+        'all_studies': all_studies,
+    }
+    return render(request, 'participate.html', context)
+
 @login_required
 def profile(request):
   profile = Profile.objects.get(user=request.user)
