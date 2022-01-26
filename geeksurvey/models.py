@@ -6,11 +6,18 @@ from django.utils import timezone
 # Allows for enumerated types
 from django.utils.translation import gettext_lazy as _
 
+USD_DECIMAL_NUM = 2
+USD_MAX_DIGITS = 17
+
 class Study(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=400)
     last_modified = models.DateTimeField(auto_now_add=True)
     expiry_date = models.DateTimeField('expiry date')
+    balance = models.DecimalField(default=0, max_digits=USD_MAX_DIGITS,
+                                    decimal_places=USD_DECIMAL_NUM)
+    compensation = models.DecimalField(default=0, max_digits=USD_MAX_DIGITS,
+                                    decimal_places=USD_DECIMAL_NUM)
 
     owner = models.ForeignKey(User,
                               related_name="owner",
@@ -40,8 +47,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # avatar = models.ImageField(default='/static/pfp_participant.png')
     bio = models.TextField(max_length=200)
-    age = models.IntegerField(default=0)
-    user_exp = models.IntegerField(default=0)
+    age = models.PositiveSmallIntegerField(default=0)
+    years_of_experience = models.PositiveSmallIntegerField(default=0)
+    balance = models.DecimalField(default=0, max_digits=17, decimal_places=2)
 
     # Defines choices in the Profile model class as recommended by Django Docs
     class LevelOfEducation(models.TextChoices):

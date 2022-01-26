@@ -23,7 +23,7 @@ def index(request):
 
 def working(request):
   return render(request, 'working.html')
-  
+
 def help(request):
   return render(request, 'help.html')
 
@@ -79,11 +79,13 @@ def study_create(request):
       s_descr  = study_form.cleaned_data['description']
       s_code   = study_form.cleaned_data['completion_code']
       s_survey = study_form.cleaned_data['survey_url']
+      s_comp   = study_form.cleaned_data['compensation']
       study = Study(owner=request.user,
                     title=s_title,
                     description=s_descr,
                     completion_code=s_code,
                     survey_url=s_survey,
+                    compensation=s_comp,
                     last_modified=datetime.now(),
                     expiry_date=datetime.now()+timedelta(days=365))
       study.save()
@@ -95,4 +97,3 @@ def study_create(request):
   context={'profile':profile,
            'study_form':study_form}
   return render(request, 'study_create.html', context)
-
