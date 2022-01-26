@@ -27,4 +27,5 @@ class ProfileUpdateForm(forms.ModelForm):
 class StudyUpdateForm(forms.ModelForm):
     class Meta:
         model = Study
-        exclude = ['last_modified', 'enrolled', 'completed', 'owner', 'expiry_date', 'balance']
+        exclude = ['id', 'last_modified', 'enrolled', 'completed', 'owner', 'expiry_date', 'balance']
+
