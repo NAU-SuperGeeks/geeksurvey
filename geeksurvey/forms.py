@@ -22,10 +22,9 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['bio', 'age', 'user_exp', 'level_of_education', 'occupation']
+        fields = ['bio', 'age', 'years_of_experience', 'level_of_education', 'occupation']
 
 class StudyUpdateForm(forms.ModelForm):
     class Meta:
         model = Study
-        exclude = ['last_modified', 'enrolled', 'completed', 'owner', 'expiry_date']
-
+        exclude = ['last_modified', 'enrolled', 'completed', 'owner', 'expiry_date', 'balance']
