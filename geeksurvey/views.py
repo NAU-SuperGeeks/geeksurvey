@@ -12,14 +12,6 @@ from .models import Profile
 
 from .forms import *
 
-def study_landing_page(request, study_id):
-    study = get_object_or_404(Study, pk=study_id)
-    owner_profile = Profile.objects.get(user=study.owner)
-    context = {
-        'study':study,
-        'owner_profile':owner_profile,
-    }
-    return render(request, 'study_landing_page.html', context)
 
 
 def index(request):
@@ -97,6 +89,7 @@ def study_create(request):
       s_code   = study_form.cleaned_data['completion_code']
       s_survey = study_form.cleaned_data['survey_url']
       s_comp   = study_form.cleaned_data['compensation']
+      s_age    = study_form.cleaned_data['min_age']
 
       study = Study(owner=request.user,
                     title=s_title,
@@ -104,6 +97,7 @@ def study_create(request):
                     completion_code=s_code,
                     survey_url=s_survey,
                     compensation=s_comp,
+                    min_age = s_age,
                     last_modified=datetime.now(),
                     expiry_date=datetime.now()+timedelta(days=365))
       study.save()
@@ -112,6 +106,45 @@ def study_create(request):
       return redirect('profile')  # TODO redirect to research dashboard or study view page
   else:
     study_form = StudyUpdateForm(instance=Study())
+    
+    # define custom labels for the form
+    study_form['compensation'].label = "Compensation (USD)"
+    study_form['min_age'].label = "Minimum Age for Participants"
   context={'profile':profile,
            'study_form':study_form}
   return render(request, 'study_create.html', context)
+
+def study_landing_page(request, study_id):
+  study = get_object_or_404(Study, pk=study_id)
+  owner_profile = Profile.objects.get(user=study.owner)
+  context = {
+      'user':request.user,
+      'study':study,
+      'owner_profile':owner_profile,
+  }
+  return render(request, 'study_landing_page.html', context)
+
+@login_required
+def study_enroll(request, study_id):
+  if request.method != 'POST':
+    return redirect('home')
+
+  study = get_object_or_404(Study, pk=study_id)
+  user_profile = Profile.objects.get(user=request.user)
+  
+  if user_profile.age < study.min_age:
+    # TODO specify why you cant enroll.
+    return redirect('working.html')
+
+  # enroll the user
+  study.enrolled.add(request.user)
+
+  # redirect to landing page
+  # TODO send to participation dashboard ?
+  owner_profile = Profile.objects.get(user=study.owner)
+  context = {
+      'study':study,
+      'owner_profile':owner_profile,
+  }
+  return redirect('study_landing_page', study_id)
+
