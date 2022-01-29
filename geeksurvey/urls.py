@@ -19,15 +19,17 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', views.index, name='home'),
-    path('participate/', views.participate, name='participate'),
-    path('study/<uuid:study_id>/', views.study_landing_page, name='study_landing_page'),
-    path('study/enroll/<uuid:study_id>/', views.study_enroll, name='study_enroll'),
     path('working.html', views.working, name='working'),
     path('help/', views.help, name='help'),
+    path('accounts/', include('allauth.urls')),
+    path('admin/', admin.site.urls),
+    path('participate/', views.participate, name='participate'),
+    path('participate/find/', views.part_discover, name='part_discover'),
+    path('study/<uuid:study_id>/', views.study_landing_page, name='study_landing_page'),
+    path('study/enroll/<uuid:study_id>/', views.study_enroll, name='study_enroll'),
     path('profile/', views.profile, name='profile'),
     path('profile/update/', views.profile_update, name='profile_update'),
+    path('research/', views.research, name='research'),
     path('research/create/', views.study_create, name='study_create'),
-    path('accounts/', include('allauth.urls'))
 ]

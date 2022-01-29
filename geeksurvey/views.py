@@ -30,17 +30,20 @@ def help(request):
   return render(request, 'help.html')
 
 def participate(request):
+  return render(request, 'participate/index.html')
+
+def part_discover(request):
     all_studies = Study.objects.all()
     context = {
         'all_studies': all_studies,
     }
-    return render(request, 'participate.html', context)
+    return render(request, 'participate/discover.html', context)
 
 @login_required
 def profile(request):
   profile = Profile.objects.get(user=request.user)
   context={'profile':profile}
-  return render(request, 'profile.html', context)
+  return render(request, 'profile/index.html', context)
 
 @login_required
 def profile_update(request):
@@ -66,17 +69,17 @@ def profile_update(request):
       'p_form': p_form
   }
 
-  return render(request, 'profile_update.html', context)
+  return render(request, 'profile/update.html', context)
 
 @login_required
-def research_dashboard(request):
+def research(request):
   profile = Profile.objects.get(user=request.user)
 
   # show existing studies created by the user
-  studies = Study.object.get(owner=request.user)
+  studies = Study.objects.filter(owner=request.user)
   context = {'profile':profile,
              'studies':studies}
-  return render(request, 'research.html', context)
+  return render(request, 'research/index.html', context)
 
 @login_required
 def study_create(request):
@@ -122,7 +125,7 @@ def study_landing_page(request, study_id):
       'study':study,
       'owner_profile':owner_profile,
   }
-  return render(request, 'study_landing_page.html', context)
+  return render(request, 'study/landing.html', context)
 
 @login_required
 def study_enroll(request, study_id):
