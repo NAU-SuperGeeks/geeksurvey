@@ -18,6 +18,11 @@
   <p> Description: {{study.description}} </p>
   <p> Owner: {{study.owner}} </p>
   <p> Owner Bio: {{owner_profile.bio}} </p>
-  <a href= "{% url 'working' %}">Enroll</a><br>
+
+  <form action="{% url 'study_enroll' study.id %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Enroll" />
+  </form>
 
 {% endblock %}
+

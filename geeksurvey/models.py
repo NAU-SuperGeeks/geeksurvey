@@ -37,6 +37,10 @@ class Study(models.Model):
 
     survey_url = models.URLField(max_length=200)
 
+    # begin enrollment criteria
+
+    # minimum age
+    min_age = models.PositiveSmallIntegerField(default=0)
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
 
