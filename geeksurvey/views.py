@@ -115,7 +115,7 @@ def study_create(request):
     study_form['min_age'].label = "Minimum Age for Participants"
   context={'profile':profile,
            'study_form':study_form}
-  return render(request, 'study_create.html', context)
+  return render(request, 'study/create.html', context)
 
 def study_landing_page(request, study_id):
   study = get_object_or_404(Study, pk=study_id)
