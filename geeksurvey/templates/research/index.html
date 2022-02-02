@@ -33,12 +33,12 @@
 
 {% for study in studies %}
 
-<a href="{% url 'study_landing_page' study.id %}" class='studyPreview'>
+<a href="{% url 'study_edit' study.id %}" class='studyPreview'>  
 <div class='studyPreview'>
   <h3> {{study.title}} </h3>
   <p> {{study.description}} </p>
   <p> {{study.owner}} </p>
-  
+
 </div>
 
 </a>

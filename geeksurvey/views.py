@@ -82,6 +82,45 @@ def research(request):
   return render(request, 'research/index.html', context)
 
 @login_required
+def study_edit(request, study_id):
+    study = Study.objects.get(id=study_id)
+    if (request.user != study.owner):
+        return HttpResponse(status=401)
+
+    profile = Profile.objects.get(user=request.user)
+    if request.method == 'POST':
+        study_form = StudyUpdateForm(request.POST, instance=request.user)
+        if study_form.is_valid():
+            s_title  = study_form.cleaned_data['title']
+            s_descr  = study_form.cleaned_data['description']
+            s_code   = study_form.cleaned_data['completion_code']
+            s_survey = study_form.cleaned_data['survey_url']
+            s_comp   = study_form.cleaned_data['compensation']
+            s_age    = study_form.cleaned_data['min_age']
+
+            study.title           = s_title
+            study.description     = s_descr
+            study.completion_code = s_code
+            study.survey_url      = s_survey
+            study.compensation    = s_comp
+            study.min_age         = s_age
+            study.last_modified   = datetime.now()
+            study.expiry_date     = datetime.now()+timedelta(days=365)
+            study.save()
+
+            messages.success(request, f'Your study has been updated!')
+            return redirect('profile')  # TODO redirect to research dashboard or study view page
+    else:
+       study_form = StudyUpdateForm(instance=study)
+
+       # define custom labels for the form
+       study_form['compensation'].label = "Compensation (USD)"
+       study_form['min_age'].label = "Minimum Age for Participants"
+       context={'profile':profile,
+                'study_form':study_form}
+       return render(request, 'study/update.html', context)
+
+@login_required
 def study_create(request):
   profile = Profile.objects.get(user=request.user)
   if request.method == 'POST':
@@ -109,13 +148,13 @@ def study_create(request):
       return redirect('profile')  # TODO redirect to research dashboard or study view page
   else:
     study_form = StudyUpdateForm(instance=Study())
-    
+
     # define custom labels for the form
     study_form['compensation'].label = "Compensation (USD)"
     study_form['min_age'].label = "Minimum Age for Participants"
   context={'profile':profile,
            'study_form':study_form}
-  return render(request, 'study/create.html', context)
+  return render(request, 'study/update.html', context)
 
 def study_landing_page(request, study_id):
   study = get_object_or_404(Study, pk=study_id)
@@ -134,7 +173,7 @@ def study_enroll(request, study_id):
 
   study = get_object_or_404(Study, pk=study_id)
   user_profile = Profile.objects.get(user=request.user)
-  
+
   if user_profile.age < study.min_age:
     # TODO specify why you cant enroll.
     return redirect('working.html')
@@ -150,4 +189,3 @@ def study_enroll(request, study_id):
       'owner_profile':owner_profile,
   }
   return redirect('study_landing_page', study_id)
-
