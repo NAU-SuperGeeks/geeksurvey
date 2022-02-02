@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h1> Create A Study </h1>
+<h1> Create/Update A Study </h1>
 
 <h2 >{{ user.username }}</h2>
 
@@ -15,9 +15,8 @@
     {{ study_form|crispy }} <!-- Study Form -->
 </fieldset>
 <div class="form-group">
-    <button class="btn btn-outline-info" type="submit">Update</button>
+    <button class="btn btn-outline-info" type="submit">Submit</button>
 </div>
 
 
 {% endblock %}
-

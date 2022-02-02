@@ -31,5 +31,6 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('profile/update/', views.profile_update, name='profile_update'),
     path('research/', views.research, name='research'),
-    path('research/create/', views.study_create, name='study_create'),
+    path('study/edit/<uuid:study_id>/', views.study_edit, name='study_edit'),
+    path('study/create/', views.study_create, name='study_create'),
 ]
