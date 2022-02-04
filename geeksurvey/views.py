@@ -91,23 +91,23 @@ def study_edit(request, study_id):
     if request.method == 'POST':
         study_form = StudyUpdateForm(request.POST, instance=request.user)
         if study_form.is_valid():
-            s_title  = study_form.cleaned_data['title']
-            s_descr  = study_form.cleaned_data['description']
-            s_code   = study_form.cleaned_data['completion_code']
-            s_survey = study_form.cleaned_data['survey_url']
-            s_comp   = study_form.cleaned_data['compensation']
-            s_age    = study_form.cleaned_data['min_age']
-
+            s_title      = study_form.cleaned_data['title']
+            s_descr      = study_form.cleaned_data['description']
+            s_code       = study_form.cleaned_data['completion_code']
+            s_survey     = study_form.cleaned_data['survey_url']
+            s_comp       = study_form.cleaned_data['compensation']
+            s_min_age    = study_form.cleaned_data['min_age']
+            s_max_age    = study_form.cleaned_data['max_age']
             study.title           = s_title
             study.description     = s_descr
             study.completion_code = s_code
             study.survey_url      = s_survey
             study.compensation    = s_comp
-            study.min_age         = s_age
+            study.min_age         = s_min_age
+            study.max_age         = s_max_age
             study.last_modified   = datetime.now()
             study.expiry_date     = datetime.now()+timedelta(days=365)
             study.save()
-
             messages.success(request, f'Your study has been updated!')
             return redirect('profile')  # TODO redirect to research dashboard or study view page
     else:
@@ -126,24 +126,24 @@ def study_create(request):
   if request.method == 'POST':
     study_form = StudyUpdateForm(request.POST, instance=request.user)
     if study_form.is_valid():
-      s_title  = study_form.cleaned_data['title']
-      s_descr  = study_form.cleaned_data['description']
-      s_code   = study_form.cleaned_data['completion_code']
-      s_survey = study_form.cleaned_data['survey_url']
-      s_comp   = study_form.cleaned_data['compensation']
-      s_age    = study_form.cleaned_data['min_age']
-
+      s_title      = study_form.cleaned_data['title']
+      s_descr      = study_form.cleaned_data['description']
+      s_code       = study_form.cleaned_data['completion_code']
+      s_survey     = study_form.cleaned_data['survey_url']
+      s_comp       = study_form.cleaned_data['compensation']
+      s_min_age    = study_form.cleaned_data['min_age']
+      s_max_age    = study_form.cleaned_data['max_age']
       study = Study(owner=request.user,
                     title=s_title,
                     description=s_descr,
                     completion_code=s_code,
                     survey_url=s_survey,
                     compensation=s_comp,
-                    min_age = s_age,
+                    min_age = s_min_age,
+                    max_age = s_max_age,
                     last_modified=datetime.now(),
                     expiry_date=datetime.now()+timedelta(days=365))
       study.save()
-
       messages.success(request, f'Your study has been created!')
       return redirect('profile')  # TODO redirect to research dashboard or study view page
   else:

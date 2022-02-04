@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 # Allows for enumerated types
 from django.utils.translation import gettext_lazy as _
+from django_countries.fields import CountryField
+from django.core.exceptions import ValidationError
 
 USD_DECIMAL_NUM = 2
 USD_MAX_DIGITS = 17
@@ -42,6 +44,9 @@ class Study(models.Model):
     # minimum age
     min_age = models.PositiveSmallIntegerField(default=0)
 
+    # maximum Age
+    max_age = models.PositiveSmallIntegerField(default=150)
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
 
     def __str__(self):
@@ -58,6 +63,8 @@ class Profile(models.Model):
     age = models.PositiveSmallIntegerField(default=0)
     years_of_experience = models.PositiveSmallIntegerField(default=0)
     balance = models.DecimalField(default=0, max_digits=USD_MAX_DIGITS, decimal_places=USD_DECIMAL_NUM)
+    country_of_origin = CountryField(default="US", blank_label='(Select Country)')
+    current_location = CountryField(default="US", blank_label='(Select Country)')
 
     # Defines choices in the Profile model class as recommended by Django Docs
     class LevelOfEducation(models.TextChoices):
