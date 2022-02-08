@@ -50,7 +50,7 @@ class Study(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
 
     def __str__(self):
-      return self.title
+        return self.title
 
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
