@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2> You Failed to Enroll! </h2>
+
+<p> You don't meet the required criteria to enroll in <a href="{% url 'study_landing_page' study.id %}">{{study.title}}</a></p>
+<a href="{% url 'home' %}"> Go Back </a>
+
+{% endblock %}

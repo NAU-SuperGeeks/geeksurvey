@@ -83,6 +83,8 @@ def study_update_helper(request, study, study_form):
     s_comp       = study_form.cleaned_data['compensation']
     s_min_age    = study_form.cleaned_data['min_age']
     s_max_age    = study_form.cleaned_data['max_age']
+    s_min_yoe    = study_form.cleaned_data['min_yoe']
+    s_max_yoe    = study_form.cleaned_data['max_yoe']
     study.owner           = request.user
     study.title           = s_title
     study.description     = s_descr
@@ -91,6 +93,8 @@ def study_update_helper(request, study, study_form):
     study.compensation    = s_comp
     study.min_age         = s_min_age
     study.max_age         = s_max_age
+    study.min_yoe         = s_min_yoe
+    study.max_yoe         = s_max_yoe
     study.last_modified   = datetime.now()
     study.expiry_date     = datetime.now()+timedelta(days=365)
     study.save()
@@ -109,15 +113,17 @@ def study_edit(request, study_id):
             messages.success(request, f'Your study has been updated!')
             return redirect('research')  # TODO redirect to research dashboard or study view page
     else:
-       study_form = StudyUpdateForm(instance=study)
+        study_form = StudyUpdateForm(instance=study)
 
-       # define custom labels for the form
-       study_form['compensation'].label = "Compensation (USD)"
-       study_form['min_age'].label = "Minimum Age for Participants"
-       study_form['max_age'].label = "Maximum Age for Participants"
-       context={'profile':profile,
+        # define custom labels for the form
+        study_form['compensation'].label = "Compensation (USD)"
+        study_form['min_age'].label = "Minimum Age for Participants"
+        study_form['max_age'].label = "Maximum Age for Participants"
+        study_form['min_yoe'].label = "Minimum Years of Experience"
+        study_form['max_yoe'].label = "Maximum Years of Experience"
+        context={'profile':profile,
                 'study_form':study_form}
-       return render(request, 'study/update.html', context)
+        return render(request, 'study/update.html', context)
 
 @login_required
 def study_create(request):
@@ -136,6 +142,8 @@ def study_create(request):
         study_form['compensation'].label = "Compensation (USD)"
         study_form['min_age'].label = "Minimum Age for Participants"
         study_form['max_age'].label = "Maximum Age for Participants"
+        study_form['min_yoe'].label = "Minimum Years of Experience"
+        study_form['max_yoe'].label = "Maximum Years of Experience"
         context={'profile':profile,
                  'study_form':study_form}
         return render(request, 'study/update.html', context)
@@ -158,9 +166,16 @@ def study_enroll(request, study_id):
     study = get_object_or_404(Study, pk=study_id)
     user_profile = Profile.objects.get(user=request.user)
 
-    if user_profile.age < study.min_age:
+    # enforce enrollment criteria
+    if user_profile.age < study.min_age or \
+       user_profile.age > study.max_age or \
+       user.profile.years_of_experience < study.min_yoe or \
+       user.profile.years_of_experience > study.max_yoe:
         # TODO specify why you cant enroll.
-        return redirect('working.html')
+        # if fail, go to failure page
+        return redirect('study_enroll_fail', study_id)
+
+    # if succeeed, go to study landing page
 
     # enroll the user
     study.enrolled.add(request.user)
@@ -173,4 +188,39 @@ def study_enroll(request, study_id):
         'owner_profile':owner_profile,
     }
     return redirect('study_landing_page', study_id)
+
+@login_required
+def study_enroll_fail(request, study_id):
+    study = get_object_or_404(Study, pk=study_id)
+    profile = Profile.objects.get(user=request.user)
+    context = {
+        'study':study,
+        'profile':profile,
+    }
+    return render(request, 'study/enroll_fail.html', context)
+
+@login_required
+def study_complete(request, study_id):
+    if request.method == 'POST':
+        study = get_object_or_404(Study, pk=study_id)
+        complete_form = StudyCompleteForm(request.POST)
+
+        if complete_form.is_valid():
+            code_input = complete_form.cleaned_data['completion_code']
+            if code_input == study.completion_code:
+                study.completed.add(request.user)
+                study.save()
+
+        return redirect('study_landing_page', study_id)
+    else:
+      study = get_object_or_404(Study, pk=study_id)
+
+      # redirect if user not enrolled
+      if request.user not in study.enrolled.all():
+          return redirect('home')
+
+      study.completion_code = ""  # set to none so info doesnt render for user
+      complete_form = StudyCompleteForm(instance=study)
+      context = {'study':study, 'complete_form':complete_form}
+      return render(request, 'study/complete.html', context)
 

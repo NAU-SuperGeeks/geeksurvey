@@ -12,17 +12,39 @@
 {% endblock %}
 
 {% block content %}
-  <h1> Study </h1>
+  <h1> Study: {{study.title}} </h1>
+  {% if request.user in study.enrolled.all %}
+    <p> (You're enrolled in this study) </p>
+  {% endif %}
+  {% if request.user in study.completed.all %}
+    <p> (You've completed this study) </p>
+  {% endif %}
   <hr>
-  <h3> Title: {{study.title}} </h3>
   <p> Description: {{study.description}} </p>
   <p> Owner: {{study.owner}} </p>
   <p> Owner Bio: {{owner_profile.bio}} </p>
+  <p> Enrolled:
+    {% for e in study.enrolled.all %}
+    <span> {{ e }} </span>
+    {% endfor %}
+  </p>
+  <p> Completed:
+    {% for e in study.completed.all %}
+    <span> {{ e }} </span>
+    {% endfor %}
+  </p>
 
-  <form action="{% url 'study_enroll' study.id %}" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="Enroll" />
-  </form>
+  {% if not request.user in study.enrolled.all %}
+    <form action="{% url 'study_enroll' study.id %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="Enroll" />
+    </form>
+  {% else %}
+    {% if not request.user in study.completed.all %}
+      <p> (You're enrolled but still need to complete) </p>
+      <a href="{% url 'study_complete' study.id %}">Complete this study</a>
+    {% endif %}
+  {% endif %}
 
 {% endblock %}
 
