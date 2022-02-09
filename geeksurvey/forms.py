@@ -28,3 +28,9 @@ class StudyUpdateForm(forms.ModelForm):
     class Meta:
         model = Study
         exclude = ['id', 'last_modified', 'enrolled', 'completed', 'owner', 'expiry_date', 'balance']
+
+class StudyCompleteForm(forms.ModelForm):
+    class Meta:
+        model = Study
+        fields = ['completion_code']
+

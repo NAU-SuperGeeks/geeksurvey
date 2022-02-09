@@ -41,11 +41,15 @@ class Study(models.Model):
 
     # begin enrollment criteria
 
-    # minimum age
+    # age
     min_age = models.PositiveSmallIntegerField(default=0)
-
-    # maximum Age
     max_age = models.PositiveSmallIntegerField(default=150)
+
+    # years of experience
+    min_yoe = models.PositiveSmallIntegerField(default=0)
+    max_yoe = models.PositiveSmallIntegerField(default=150)
+
+    # TODO add more criteria
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
 
