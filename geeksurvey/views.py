@@ -27,9 +27,18 @@ def participate(request):
 @login_required
 def part_discover(request):
     # TODO filter by criteria
+    user_profile = Profile.objects.get(user=request.user)
     all_studies = Study.objects.all()
+    eligible_studies = []
+
+    for study in all_studies:
+        if user_profile.can_enroll(study):
+            eligible_studies.append(study)
+
+
+    # (use profile.can_enroll())
     context = {
-        'all_studies': all_studies,
+        'studies': eligible_studies,
     }
     return render(request, 'participate/discover.html', context)
 
@@ -167,16 +176,18 @@ def study_enroll(request, study_id):
     user_profile = Profile.objects.get(user=request.user)
 
     # enforce enrollment criteria
+    '''
     if user_profile.age < study.min_age or \
        user_profile.age > study.max_age or \
        user.profile.years_of_experience < study.min_yoe or \
        user.profile.years_of_experience > study.max_yoe:
+    '''
+    if not user_profile.can_enroll(study):
         # TODO specify why you cant enroll.
         # if fail, go to failure page
         return redirect('study_enroll_fail', study_id)
 
     # if succeeed, go to study landing page
-
     # enroll the user
     study.enrolled.add(request.user)
 
@@ -223,4 +234,3 @@ def study_complete(request, study_id):
       complete_form = StudyCompleteForm(instance=study)
       context = {'study':study, 'complete_form':complete_form}
       return render(request, 'study/complete.html', context)
-

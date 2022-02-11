@@ -8,9 +8,11 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from django.core.exceptions import ValidationError
+from datetime import datetime
 
 USD_DECIMAL_NUM = 2
 USD_MAX_DIGITS = 17
+
 
 class Study(models.Model):
     title = models.CharField(max_length=100)
@@ -98,6 +100,19 @@ class Profile(models.Model):
     occupation = models.CharField(max_length=5,
         choices=Occupation.choices,
         default=Occupation.SOFTWARE_ENGINEER)
+
+    def can_enroll(self, study):
+        if self.age < study.min_age or \
+           self.age > study.max_age or \
+           self.years_of_experience < study.min_yoe or \
+           self.years_of_experience > study.max_yoe or \
+           datetime.now(timezone.utc) > study.expiry_date:
+
+           print("CANT ENROLL")
+           return False;
+
+        print("CAN ENROLL")
+        return True;
 
     def __str__(self):
         return self.user.username
