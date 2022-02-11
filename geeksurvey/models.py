@@ -72,32 +72,86 @@ class Profile(models.Model):
 
     # Defines choices in the Profile model class as recommended by Django Docs
     class LevelOfEducation(models.TextChoices):
-        HIGH_SCHOOL = 'HS', _('High School or Equivalent')
-        BACHELORS = 'BD', _('Bachelor\'s Degree')
-        MASTERS = 'MD', _('Master\'s Degree')
-        DOCTORATE = 'PHD', _('PhD or Equivalent')
+        PRIMARY_SCHOOL   = 'PS', _('Primary/Elementary School')
+        SECONDARY_SCHOOL = 'SS', _('Secondary School (e.g. American High School or German Realschule)')
+        SOME_COLLEGE     = 'SC', _('Some College/University Study Without Earning a Degree')
+        ASSOCIATES       = 'AD', _('Associate\'s Degree (A.A., A.S., etc.)')
+        BACHELORS        = 'BD', _('Bachelor\'s Degree (B.A., B.S., B.Eng., etc.)')
+        MASTERS          = 'MD', _('Master\'s Degree (M.A., M.S., M.Eng., MBA, etc.)')
+        PROFESSIONAL     = 'PRO', _('Professional Degree (JD, MD, etc.)')
+        DOCTORATE        = 'DOC', _('Other Doctoral Degree (Ph.D., Ed.D., etc.)')
     # Adds level of education as a choosable field for the user profile
     level_of_education = models.CharField(max_length=3,
-        choices=LevelOfEducation.choices,
-        default=LevelOfEducation.HIGH_SCHOOL)
+                                          choices=LevelOfEducation.choices,
+                                          default=LevelOfEducation.PRIMARY_SCHOOL)
 
     # Defines choices in the Profile model class as recommended by Django Docs
+    # Available choices based on 2021 Stack Overflow Developer Survey
     class Occupation(models.TextChoices):
-        SOFTWARE_ENGINEER = 'SWE', _('Software Engineer/Developer')
-        DATA_SCIENTIST = 'DSCI', _('Data Scientist')
-        SYSTEMS_ADMINISTRATOR = 'SYSA', _('System Administrator/Analyst')
-        PRODUCT_MANAGER = 'PRDM', _('Product Manager')
-        NETWORK_ADMINISTRATOR = 'NWA', _('Network Administrator/Analyst')
-        DATABASE_ADMINISTRATOR = 'DBA', _('Database Administrator/Analyst')
-        SECURITY_ANALYST = 'SECA', _('Security Analyst')
-        PROFESSOR = 'PROF', _('Professor/Instructor')
-        RESEARCHER = 'RSCHR', _('Researcher')
-        SOFTWARE_TESTER = 'SWT', _('Software Tester')
+        FULL_STACK_DEVELOPER                       = 'FSD', _('Full-stack Developer')
+        BACK_END_DEVELOPER                         = 'BED', _('Back-end Developer')
+        FRONT_END_DEVELOPER                        = 'FED', _('Front-end Developer')
+        DESKTOP_ENTERPRISE_APPLICATION_DEVELOPER   = 'DEAD', _('Desktop/Enterprise Application Developer')
+        MOBILE_DEVELOPER                           = 'MD', _('Mobile Developer')
+        DEVOPS_SPECIALIST                          = 'DS', _('DevOps Specialist')
+        SYSTEM_ADMINISTRATOR                       = 'SA', _('System Administrator')
+        DATABASE_ADMINISTRATOR                     = 'DA', _('Database Administrator')
+        DESIGNER                                   = 'D', _('Designer')
+        EMBEDDED_APPLICATIONS_DEVICES_DEVELOPER    = 'EADD', _('Embedded Applications/Devices Developer')
+        DATA_SCIENTIST_MACHINE_LEARNING_SPECIALIST = 'DSMLS', _('Data Scientist/Machine Learning Specialist')
+        STUDENT                                    = 'S', _('Student')
+        DATA_ENGINEER                              = 'DE', _('Data Engineer')
+        ENGINEERING_MANAGER                        = 'EM', _('Engineering Manager')
+        DATA_BUSINESS_ANALYST                      = 'DBA', _('Data/Business Analyst')
+        QA_TEST_DEVELOPER                          = 'QTD', _('QA/Test Developer')
+        PRODUCT_MANAGER                            = 'PM', _('Product Manager')
+        ACADEMIC_RESEARCHER                        = 'AR', _('Academic Researcher')
+        SITE_RELIABILITY_ENGINEER                  = 'SRE', _('Site Reliability Engineer')
+        EDUCATOR                                   = 'E', _('Educator')
+        GAME_GRAPHICS_DEVELOPER                    = 'GGD', _('Game/Graphics Developer')
+        SCIENTIST                                  = 'SCI', _('Scientist')
     # Adds occupation as a choosable field for the user profile
     # TODO: May want to add an "other" option that is a write in. May require custom model.
     occupation = models.CharField(max_length=5,
-        choices=Occupation.choices,
-        default=Occupation.SOFTWARE_ENGINEER)
+                                  choices=Occupation.choices,
+                                  default=Occupation.STUDENT)
+
+    # Available choices based on 2021 Stack Overflow Developer Survey
+    class RaceAndEthnicity(models.TextChoices):
+        WHITE_EUROPEAN_DESCENT = 'WED', _('White or of European Descent')
+        SOUTH_ASIAN            = 'SA', _('South Asian')
+        HISPANIC_LATINO_A_X    = 'HL', _('Hispanic or Latino/a/x')
+        MIDDLE_EASTERN         = 'ME', _('Middle Eastern')
+        SOUTHEAST_ASIAN        = 'SEA', _('Southeast Asian')
+        EAST_ASIAN             = 'EA', ('East Asian')
+        BLACK_AFRICAN_DESCENT  = 'BAD', _('Black or of African Descent')
+        INDIGENOUS             = 'I', _('Indigenous')
+        PREFER_NOT_TO_SAY_IDK  = 'PNTSIDK', _('Prefer Not to Say or I Don\'t Know')
+    # Adds race and ethnicity as a choosable field for the user profile
+    # TODO: May want to add an "other" option that is a write in. May require custom model.
+    race_and_ethnicity = models.CharField(max_length=7,
+                                          choices=RaceAndEthnicity.choices,
+                                          default=RaceAndEthnicity.PREFER_NOT_TO_SAY_IDK)
+
+    class OpenSourceExperience(models.TextChoices):
+        YES = 'Y', _('Yes')
+        NO  = 'N', _('No')
+    # Adds open source experience as a choosable field for the user profile
+    open_source_experience = models.CharField(max_length=1,
+                                              choices=OpenSourceExperience.choices,
+                                              default=OpenSourceExperience.NO)
+
+    # Available choices based on 2021 Stack Overflow Developer Survey
+    class Gender(models.TextChoices):
+        MAN                                        = 'M', _('Man')
+        WOMAN                                      = 'W', _('Woman')
+        NONBINARY_GENDERQUEER_GENDER_NONCONFORMING = 'NGGN', _('Non-binary/Genderqueer/Gender Non-conforming')
+        PREFER_NOT_TO_SAY                          = 'PNTS', _('Prefer Not to Say')
+    # Adds gender as a choosable field for the user profile
+    # TODO: May want to add an "other" option that is a write in. May require custom model.
+    gender = models.CharField(max_length=4,
+                              choices=Gender.choices,
+                              default=Gender.PREFER_NOT_TO_SAY)
 
     def __str__(self):
         return self.user.username
