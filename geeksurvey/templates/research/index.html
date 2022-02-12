@@ -29,19 +29,22 @@
 {% block content %}
 
 <h2> Reseach Dashboard </h2>
+  <p> <a href="{% url 'study_create' %}"> create a study </a> </p>
+<hr>
 <h3> Your Studies </h3>
+<p> (click to edit) </p>
 
 {% for study in studies %}
 
-<a href="{% url 'study_edit' study.id %}" class='studyPreview'>  
-<div class='studyPreview'>
-  <h3> {{study.title}} </h3>
-  <p> {{study.description}} </p>
-  <p> {{study.owner}} </p>
+  <a href="{% url 'study_edit' study.id %}" class='studyPreview'>  
+  <div class='studyPreview'>
+    <h3> {{study.title}} </h3>
+    <p> {{study.description}} </p>
+    <p> {{study.owner}} </p>
 
-</div>
+  </div>
+  </a>
 
-</a>
 {% endfor %}
 
 {% endblock %}

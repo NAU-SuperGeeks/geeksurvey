@@ -66,7 +66,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # avatar = models.ImageField(default='/static/pfp_participant.png')
     bio = models.TextField(max_length=200)
-    age = models.PositiveSmallIntegerField(default=0)
+    age = models.PositiveSmallIntegerField(default=18)
     years_of_experience = models.PositiveSmallIntegerField(default=0)
     balance = models.DecimalField(default=0, max_digits=USD_MAX_DIGITS, decimal_places=USD_DECIMAL_NUM)
     country_of_origin = CountryField(default="US", blank_label='(Select Country)')
