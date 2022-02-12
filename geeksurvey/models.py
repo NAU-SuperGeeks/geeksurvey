@@ -162,10 +162,8 @@ class Profile(models.Model):
            self.years_of_experience > study.max_yoe or \
            datetime.now(timezone.utc) > study.expiry_date:
 
-           print("CANT ENROLL")
            return False;
 
-        print("CAN ENROLL")
         return True;
 
     def __str__(self):
