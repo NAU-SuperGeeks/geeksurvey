@@ -31,6 +31,7 @@ urlpatterns = [
     path('study/enroll/<uuid:study_id>/fail/', views.study_enroll_fail, name='study_enroll_fail'),
     path('study/complete/<uuid:study_id>/', views.study_complete, name='study_complete'),
     path('profile/', views.profile, name='profile'),
+    path('profile/view/<str:username>', views.profile_view, name='profile_view'),
     path('profile/update/', views.profile_update, name='profile_update'),
     path('research/', views.research, name='research'),
     path('study/edit/<uuid:study_id>/', views.study_edit, name='study_edit'),

@@ -10,11 +10,7 @@
 <h2 class="account-heading">{{ user.username }}</h2>
 {% load socialaccount %}
 
-{% if user.socialaccount_set.all.0.get_avatar_url is defined %}
-  <img class="user-avatar" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" />
-{% else %}
   <img class="user-avatar" src="{% static 'pfp_participant.png' %}" />
-{% endif %}
 
 <p class="text-secondary">{{ user.email }}</p>
 </div>

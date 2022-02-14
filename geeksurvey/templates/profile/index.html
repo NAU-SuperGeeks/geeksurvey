@@ -11,9 +11,9 @@
 <img class="user-avatar" src="{% static 'pfp_participant.png' %}" />
 <p> {{ profile.bio }}</p>
 <hr>
+<p> <a href="{% url 'profile_view' user.username %}"> view full profile </a> </p>
 <p> <a href="{% url 'profile_update' %}"> edit profile</a> </p>
 <p> <a href="{% url 'account_logout' %}"> log out </a> </p>
-
 
 {% endblock %}
 

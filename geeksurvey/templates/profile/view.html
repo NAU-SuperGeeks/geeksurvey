@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_head %}
+  <style>
+    table {
+      text-align:left;
+    }
+    td {
+      padding:1em;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<h1>Profile</h1>
+<hr>
+<h2>{{ user.username }}</h2>
+<img class="user-avatar" src="{% static 'pfp_participant.png' %}" />
+<table>
+<tr>
+  <td> Full Name: </td>
+  <td> {{ user.first_name }} {{ user.last_name }} </td>
+</tr>
+<tr>
+  <td> Bio: </td>
+  <td> {{ profile.bio }} </td>
+</tr>
+<tr>
+  <td> Age: </td>
+  <td>{{ profile.age }}</td>
+</tr>
+<tr>
+  <td> Gender: </td>
+  <td>{{ profile.get_gender_display}} </td>
+</tr>
+<tr>
+  <td> Race / Ethnicity: </td>
+  <td>{{ profile.get_race_and_ethnicity_display }} </td>
+</tr>
+<tr>
+  <td> Occupation: </td>
+  <td> {{ profile.get_occupation_display }} </td>
+</tr>
+<tr>
+  <td> Years of Experience: </td>
+  <td>{{ profile.years_of_experience }}</td>
+</tr>
+<tr>
+  <td> Level Of Education: </td>
+  <td> {{ profile.get_level_of_education_display }} </td>
+</tr>
+<tr>
+  <td> Country of Origin: </td>
+  <td> {{ profile.get_country_of_origin_display }} </td>
+</tr>
+<tr>
+  <td> Current Location: </td>
+  <td>{{ profile.get_current_location_display }} </td>
+</tr>
+<tr>
+  <td> Experienced With Open Source? </td>
+  <td> {{ profile.get_open_source_experience_display }} </td>
+</tr>
+</table>
+
+{% endblock %}
+
