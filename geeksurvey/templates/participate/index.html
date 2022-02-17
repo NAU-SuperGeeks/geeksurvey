@@ -3,15 +3,16 @@
 {% block content %}
 
 <h2> Participation Dashboard </h2>
+<hr>
 
-<a href="{% url 'part_discover' %}"> Discover New Studies </a>
+<a class="btn btn-primary" href="{% url 'part_discover' %}"> Discover New Studies </a>
 <hr>
 <h3> Your Enrolled Studies </h3>
 
 {% for study in enrolled_studies %}
 
   <p>
-  <a href="{% url 'study_landing_page' study.id %}">  
+  <a class="btn btn-warning" href="{% url 'study_landing_page' study.id %}">  
     {{study.title}}
   </a>
   </p>
@@ -24,7 +25,7 @@
 {% for study in completed_studies %}
 
   <p>
-  <a href="{% url 'study_landing_page' study.id %}">  
+  <a class="btn btn-success" href="{% url 'study_landing_page' study.id %}">  
     {{study.title}}
   </a>
   </p>

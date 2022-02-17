@@ -2,45 +2,24 @@
 
 {% load static %}
 
-{% block extra_head %}
-<style>
-  div.studyPreview {
-    display: inline-block;
-    text-align: left;
-    background-color:#eee;
-    padding:1em;
-    margin:1em;
-    border-radius:1em;
-    width:80%;
-  }
-
-  div.studyPreview:hover {
-    background-color:#dfd;
-  }
-
-  a.studyPreview {
-    color:black;
-    text-decoration:none;
-  }
-</style>
-
-{% endblock %}
-
 {% block content %}
 
 <h2> Studies </h2>
 
+<div class="card-group">
 {% for study in studies %}
 
-<a href="{% url 'study_landing_page' study.id %}" class='studyPreview'>
-<div class='studyPreview'>
-  <h3> {{study.title}} </h3>
-  <p> {{study.description}} </p>
-  <p> {{study.owner}} </p>
+    <div class="card" style="max-width: 18rem;">
+      <img src="{% static 'books.png' %}" class="card-img-top" />
+      <div class="card-body">
+        <h5 class="card-title">{{study.title}}</h5>
+        <p class="card-text">{{ study.description}} </p>
+        <p class="card-text">by @{{study.owner}} </p>
+        <a href="{% url 'study_landing_page' study.id %}" class="btn btn-primary">View</a>
+      </div>
+    </div>
 
-</div>
-
-</a>
 {% endfor %}
+</div>
 
 {% endblock %}
