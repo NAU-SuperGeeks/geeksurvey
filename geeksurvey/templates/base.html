@@ -37,10 +37,12 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-item nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">Profile
+        <a class="nav-item nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
           {% if user.is_authenticated %}
           <span class="badge badge-info"> @{{ user.username }} </span>
+          &nbsp;
           {% endif %}
+          Profile
         </a>
         <a class="nav-item nav-link {% if request.resolver_match.url_name == 'research' %}active{% endif %}" href="{% url 'research' %}">Research</a>
         <a class="nav-item nav-link {% if request.resolver_match.url_name == 'participate' %}active{% endif %}" href="{% url 'participate' %}">Participate</a>
