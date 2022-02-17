@@ -3,24 +3,14 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block extra_head %}
-<style>
-  .content {
-    text-align:left !important;
-  }
-</style>
-
-{% endblock %}
-
 {% block content %}
-  <h1> Study: {{study.title}} </h1>
-  <h2> Completion Page </h2>
+  <h1> {{study.title}} </h1>
+  <h3> Completion Page </h3>
   <p> Please complete the <a href="{{study.survey_url}}">external survey</a> and then enter the completion code here </p>
 
   <form method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   <fieldset class="form-group">
-      <legend class="border-bottom mb-4">Complete The Study</legend>
       {{ complete_form|crispy }} <!-- Study Completion Form -->
   </fieldset>
   <div class="form-group">

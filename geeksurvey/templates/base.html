@@ -5,7 +5,16 @@
 <title>GeekSurvey</title>
 
 <link rel="shortcut icon" href="{% static 'gkslogo.png' %}" type="image/x-icon">
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+
+<!--
 <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+-->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
@@ -17,20 +26,35 @@
 <body>
   {% block body %}
 
-  <div class="crblock">
-    <a href="/">
-      <img class="corner_logo" src="{% static 'gkslogo.png' %}">
+  <div class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="pull-left navbar-brand" href="/">
+      <img src="{% static 'gkslogo.png' %}" width="50px" height="50px">
     </a>
-    <h1 class="gs_title"> GeekSurvey </h1>
-  <nav>
-  <a href="/">Home</a>
-  <a href="{% url 'profile' %}">Profile</a>
-  <a href="{% url 'research' %}">Research</a>
-  <a href="{% url 'participate' %}">Participate</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">Profile
+          {% if user.is_authenticated %}
+          <span class="badge badge-info"> @{{ user.username }} </span>
+          {% endif %}
+        </a>
+        <a class="nav-item nav-link {% if request.resolver_match.url_name == 'research' %}active{% endif %}" href="{% url 'research' %}">Research</a>
+        <a class="nav-item nav-link {% if request.resolver_match.url_name == 'participate' %}active{% endif %}" href="{% url 'participate' %}">Participate</a>
+      </div>
+
+    </div>
+
+
   </nav>
+
   </div>
 
-  <div class="crblock content">
+
+  <div class="container-fluid" style="padding-bottom:65px;">
 
   {% block precontent %}
   {% endblock %}
@@ -44,10 +68,18 @@
   {% endblock %}
   </div>
 
-  <div class="crblock bottom">
-    <a href="working.html"> Help </a>
-    <a href="https://ceias.nau.edu/capstone/projects/CS/2022/SuperGeeks/"> About </a>
-    <a href="https://github.com/NAU-SuperGeeks/geeksurvey"> Source Code </a>
+  <div class="d-none d-md-block">
+  <footer class="footer fixed-bottom">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="navbar">
+      <div class="navbar-nav">
+      <a class="nav-item nav-link" href="working.html"> Help </a>
+      <a class="nav-item nav-link" href="https://ceias.nau.edu/capstone/projects/CS/2022/SuperGeeks/"> About </a>
+      <a class="nav-item nav-link" href="https://github.com/NAU-SuperGeeks/geeksurvey"> Source Code </a>
+      </div>
+    </div>
+    </nav>
+  </footer>
   </div>
 
 </body>
