@@ -44,6 +44,11 @@ LOGOUT_REDIRECT_URL = 'home'
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
+        'APP': {
+            'client_id': config('GOOGLE_AUTH_CLIENT'),
+            'secret': config('GOOGLE_AUTH_SECRET'),
+            'key': ''
+        },
         'SCOPE': [
             'profile',
             'email',
@@ -53,6 +58,11 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     },
     'github': {
+        'APP': {
+            'client_id': config('GITHUB_AUTH_CLIENT'),
+            'secret': config('GITHUB_AUTH_SECRET'),
+            'key': ''
+        },
         'SCOPE': [
             'profile',
             'email',
