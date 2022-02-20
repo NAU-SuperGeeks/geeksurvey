@@ -63,7 +63,16 @@
       <!-- Footer-->
       <footer class="py-3 bg-dark">
         <div class="container px-5">
-          <p class="m-0 text-center text-white"> <a class="m-0 text-center text-white text-decoration-none" href="working.html"> Help </a></p>
+          <!-- If the current page is not in the same directory as the working.html page, navigate to it when the help link is used. -->
+          <!-- NOTE/TODO: The if and elif statements use the same reference the same relevant link to working.html. I tried combining the statements but that prevented the rest of the footer from appearing. Not sure why. -->
+          {% if "/accounts" in request.path %}
+            <p class="m-0 text-center text-white"> <a class="m-0 text-center text-white text-decoration-none" href="../../working.html"> Help </a></p>
+          {% elif "/account" in request.path or "/participate" in request.path or "/profile" in request.path or "/research" in request.path or "/socialaccount" in request.path or "/study" in request.path %}
+            <p class="m-0 text-center text-white"> <a class="m-0 text-center text-white text-decoration-none" href="../../working.html"> Help </a></p>
+          <!-- Otherwise, the current page is in the same directory as the working.html file. -->
+          {% else %}
+            <p class="m-0 text-center text-white"> <a class="m-0 text-center text-white text-decoration-none" href="working.html"> Help </a></p>
+          {% endif %}
           <p class="m-0 text-center text-white"> <a class="m-0 text-center text-white text-decoration-none" href="https://ceias.nau.edu/capstone/projects/CS/2022/SuperGeeks/"> About </a></p>
           <p class="m-0 text-center text-white"> <a class="m-0 text-center text-white text-decoration-none" href="https://github.com/NAU-SuperGeeks/geeksurvey"> Source Code </a></p>
           <p class="m-0 text-center text-white"> Copyright &copy; GeekSurvey 2022 </p>
