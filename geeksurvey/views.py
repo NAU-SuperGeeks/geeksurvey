@@ -122,28 +122,51 @@ def research(request):
     return render(request, 'research/index.html', context)
 
 def study_update_helper(request, study, study_form):
-    s_title      = study_form.cleaned_data['title']
-    s_descr      = study_form.cleaned_data['description']
-    s_code       = study_form.cleaned_data['completion_code']
-    s_survey     = study_form.cleaned_data['survey_url']
-    s_comp       = study_form.cleaned_data['compensation']
-    s_min_age    = study_form.cleaned_data['min_age']
-    s_max_age    = study_form.cleaned_data['max_age']
-    s_min_yoe    = study_form.cleaned_data['min_yoe']
-    s_max_yoe    = study_form.cleaned_data['max_yoe']
+    title      = study_form.cleaned_data['title']
+    descr      = study_form.cleaned_data['description']
+    code       = study_form.cleaned_data['completion_code']
+    survey     = study_form.cleaned_data['survey_url']
+    comp       = study_form.cleaned_data['compensation']
+    min_age    = study_form.cleaned_data['min_age']
+    max_age    = study_form.cleaned_data['max_age']
+    min_yoe    = study_form.cleaned_data['min_yoe']
+    max_yoe    = study_form.cleaned_data['max_yoe']
+    req_edu    = study_form.cleaned_data['req_edu']
+    req_job    = study_form.cleaned_data['req_job']
+    req_rne    = study_form.cleaned_data['req_rne']
+    req_sex    = study_form.cleaned_data['req_sex']
+    req_oss    = study_form.cleaned_data['req_oss']
     study.owner           = request.user
-    study.title           = s_title
-    study.description     = s_descr
-    study.completion_code = s_code
-    study.survey_url      = s_survey
-    study.compensation    = s_comp
-    study.min_age         = s_min_age
-    study.max_age         = s_max_age
-    study.min_yoe         = s_min_yoe
-    study.max_yoe         = s_max_yoe
+    study.title           = title
+    study.description     = descr
+    study.completion_code = code
+    study.survey_url      = survey
+    study.compensation    = comp
+    study.min_age         = min_age
+    study.max_age         = max_age
+    study.min_yoe         = min_yoe
+    study.max_yoe         = max_yoe
+    study.req_edu         = req_edu
+    study.req_job         = req_job
+    study.req_rne         = req_rne
+    study.req_sex         = req_sex
+    study.req_oss         = req_oss
     study.last_modified   = datetime.now()
     study.expiry_date     = datetime.now()+timedelta(days=365)
     study.save()
+
+def study_custom_labels(study_form):
+    study_form['compensation'].label = "Compensation (USD)"
+    study_form['survey_url'].label = "Survey URL"
+    study_form['min_age'].label = "Minimum Age for Participants"
+    study_form['max_age'].label = "Maximum Age for Participants"
+    study_form['min_yoe'].label = "Minimum Years of Experience"
+    study_form['max_yoe'].label = "Maximum Years of Experience"
+    study_form['req_edu'].label = "Required Education"
+    study_form['req_job'].label = "Required Occupation"
+    study_form['req_rne'].label = "Required Race / Ethnicity"
+    study_form['req_sex'].label = "Required Gender"
+    study_form['req_oss'].label = "Require Experience With Open Source?"
 
 @login_required
 def study_edit(request, study_id):
@@ -162,11 +185,8 @@ def study_edit(request, study_id):
         study_form = StudyUpdateForm(instance=study)
 
         # define custom labels for the form
-        study_form['compensation'].label = "Compensation (USD)"
-        study_form['min_age'].label = "Minimum Age for Participants"
-        study_form['max_age'].label = "Maximum Age for Participants"
-        study_form['min_yoe'].label = "Minimum Years of Experience"
-        study_form['max_yoe'].label = "Maximum Years of Experience"
+        study_custom_labels(study_form)
+
         context={'profile':profile,
                 'study_form':study_form}
         return render(request, 'study/update.html', context)
@@ -224,11 +244,8 @@ def study_create(request):
         study_form = StudyUpdateForm(instance=Study())
 
         # define custom labels for the form
-        study_form['compensation'].label = "Compensation (USD)"
-        study_form['min_age'].label = "Minimum Age for Participants"
-        study_form['max_age'].label = "Maximum Age for Participants"
-        study_form['min_yoe'].label = "Minimum Years of Experience"
-        study_form['max_yoe'].label = "Maximum Years of Experience"
+        study_custom_labels(study_form)
+
         context={'profile':profile,
                  'study_form':study_form}
         return render(request, 'study/update.html', context)

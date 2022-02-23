@@ -1,22 +1,141 @@
 {% extends "base.html" %}
-
 {% load static %}
 
+{% block base_head %}
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>GeekSurvey - Home</title>
+  <link rel="shortcut icon" href="{% static 'gkslogo.png' %}" type="image/x-icon">
+{% endblock %}
 {% block content %}
-
-{% if user.is_authenticated %}
-  <p>Hi {{ user.username }}!</p>
-  <p><a href="{% url 'profile_update' %}">complete your profile</a></p>
-  <p> <a href="{% url 'participate' %}"> find studies </a> </p>
-  <p> <a href="{% url 'study_create' %}"> create a study </a> </p>
-  <hr>
-  <p> <a href="{% url 'account_logout' %}"> log out </a> </p>
-{% else %}
-<p> A tool for facilitating software engineering research. </p>
-  <img class='fjord' src="{% static 'gs_fjord.png' %}">
-  <br><br>
-  <a href="{% url 'account_login' %}">log in</a><br>
-  <a href="{% url 'account_signup' %}">sign up</a>
-{% endif %}
-
+  <!-- Logic for when a user visits the home page and is authenticated. -->
+  <!-- TODO: Update this once a template has been applied to all other pages. -->
+  {% if user.is_authenticated %}
+    <h2> GeekSurvey Home </h2>
+    <hr>
+    <p>Hi {{ user.username }}!</p>
+    <p><a href="{% url 'profile_update' %}"> Complete Your Profile </a></p>
+    <p> <a href="{% url 'participate' %}"> Find Studies </a> </p>
+    <p> <a href="{% url 'study_create' %}"> Create a Study </a> </p>
+    <hr>
+    <p> <a class="btn btn-danger" href="{% url 'account_logout' %}"> log out </a> </p>
+  <!-- Logic for when a user visits the home page and is NOT authenticated. -->
+  {% else %}
+    <!--
+        Elements of the following code are derived from the Start Bootstrap - Business Frontpage v.5.0.7 Template.
+        The template is licensed under MIT and can be found at https://github.com/StartBootstrap/startbootstrap-business-frontpage/blob/master/LICENSE.
+    -->
+    <!-- Business Header -->
+    <header class="bg-dark py-5">
+        <div class="container px-5">
+            <div class="row gx-5 justify-content-center">
+                <div class="col-lg-6">
+                    <div class="text-center my-5">
+                        <h1 class="display-5 fw-bolder text-white mb-2">Revolutionizing Software Engineering Research</h1>
+                        <p class="lead text-white-50 mb-4">
+                          Conduct and participate in software engineering research studies with GeekSurvey, a platform that solves the researcher-participant coordination problem!
+                        </p>
+                        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                            <a class="btn btn-primary btn-lg px-4 me-sm-3" href="{% url 'account_signup' %}">Get Started</a>
+                            <a class="btn btn-outline-light btn-lg px-4" href="#features">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!--
+        Elements of the following code are derived from the Start Bootstrap - Business Frontpage v.5.0.7 Template.
+        The template is licensed under MIT and can be found at https://github.com/StartBootstrap/startbootstrap-business-frontpage/blob/master/LICENSE.
+    -->
+    <!-- Features Section -->
+    <section class="py-5 border-bottom" id="features">
+        <div class="container px-5 my-5">
+            <div class="row gx-5">
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
+                    <h2 class="h4 fw-bolder">Customize your profile</h2>
+                    <p>
+                      Provide information about you and your skills! The more you customize your profile, the more studies you will be eligible for.
+                    </p>
+                    <a class="text-decoration-none" href="{% url 'profile_update' %}">
+                        Edit your profile
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-building"></i></div>
+                    <h2 class="h4 fw-bolder">Create research studies</h2>
+                    <p>
+                      Find quality participants by filling out our research study form with desired traits and inserting your external survey platform link.
+                    </p>
+                    <a class="text-decoration-none" href="{% url 'study_create' %}">
+                        Create a study now
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="col-lg-4">
+                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
+                    <h2 class="h4 fw-bolder">Participate in studies</h2>
+                    <p>
+                      Make a difference by enrolling in studies that interest you! Receive compensation for your valuable time and responses.
+                    </p>
+                    <a class="text-decoration-none" href="{% url 'participate' %}">
+                        Start participating
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--
+        Elements of the following code are derived from the Start Bootstrap - Business Frontpage v.5.0.7 Template.
+        The template is licensed under MIT and can be found at https://github.com/StartBootstrap/startbootstrap-business-frontpage/blob/master/LICENSE.
+    -->
+    <!-- Testimonials Section -->
+    <!-- TODO: Add actual testimonials to replace template testimonials -->
+    <section class="py-5 border-bottom">
+        <div class="container px-5 my-5 px-5">
+            <div class="text-center mb-5">
+                <h2 class="fw-bolder">Customer testimonials</h2>
+                <p class="lead mb-0">
+                  Our customers love working with us
+                </p>
+            </div>
+            <div class="row gx-5 justify-content-center">
+                <div class="col-lg-6">
+                    <!-- Testimonial 1-->
+                    <div class="card mb-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0"><i class="bi bi-chat-right-quote-fill text-primary fs-1"></i></div>
+                                <div class="ms-4">
+                                    <p class="mb-1">
+                                      Thank you for putting together such a great product. We loved working with you and the whole team, and we will be recommending you to others!
+                                    </p>
+                                    <div class="small text-muted">- Client Name, Location</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial 2-->
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0"><i class="bi bi-chat-right-quote-fill text-primary fs-1"></i></div>
+                                <div class="ms-4">
+                                    <p class="mb-1">
+                                      The whole team was a huge help with putting things together for our company and brand. We will be hiring them again in the near future for additional work!
+                                    </p>
+                                    <div class="small text-muted">- Client Name, Location</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+  {% endif %}
 {% endblock %}

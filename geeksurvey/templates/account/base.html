@@ -42,33 +42,4 @@
       </style>
     {% endblock %}
 
-    {% block precontent %}
-
-    {% if messages %}
-    <div class="accounts_base">
-      <strong>Messages:</strong>
-      <ul>
-        {% for message in messages %}
-        <li>{{message}}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    <hr>
-    {% endif %}
-
-    <div class="accounts_menu">
-      <strong>Account Menu</strong>
-      <ul>
-        {% if user.is_authenticated %}
-        <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
-        <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
-        {% else %}
-        <li><a href="{% url 'account_login' %}">Sign In</a></li>
-        <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
-        {% endif %}
-      </ul>
-    </div>
-    <hr>
-
-    {% endblock %}
 
