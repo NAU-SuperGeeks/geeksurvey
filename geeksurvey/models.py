@@ -84,7 +84,6 @@ class Gender(models.TextChoices):
   End of Profile Fields
 '''
 
-
 class Study(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=400)
