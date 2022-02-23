@@ -18,12 +18,18 @@ from django.urls import path, include
 
 from . import views
 
+from .forms import *
+
 urlpatterns = [
     path('', views.index, name='home'),
     path('working.html', views.working, name='working'),
     path('help/', views.help, name='help'),
     path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
+    path('paypal/', include('paypal.standard.ipn.urls'), name='paypal_ipn'),
+    path('paypal/test/', PaypalFormView.as_view(), name='paypal_test'),
+    path('paypal-return/', views.PaypalReturnView.as_view(), name='paypal-return'),
+    path('paypal-cancel/', views.PaypalCancelView.as_view(), name='paypal-cancel'),
     path('participate/', views.participate, name='participate'),
     path('participate/find/', views.part_discover, name='part_discover'),
     path('study/<uuid:study_id>/', views.study_landing_page, name='study_landing_page'),

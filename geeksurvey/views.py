@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
+from django.views.generic import TemplateView
 
 import json
 
@@ -22,6 +23,17 @@ def working(request):
 
 def help(request):
     return render(request, 'help.html')
+
+# payments
+class PaypalReturnView(TemplateView):
+    template_name = 'paypal/success.html'
+
+class PaypalCancelView(TemplateView):
+    template_name = 'paypal/cancel.html'
+
+@login_required
+def payment_fund_account(request):
+    return render(request, 'working.html')
 
 @login_required
 def participate(request):
@@ -62,8 +74,6 @@ def profile(request):
     context={'profile':profile}
     return render(request, 'profile/index.html', context)
 
-from django.core import serializers
-
 
 # public profile view, accesible by url
 def profile_view(request, username):
@@ -102,6 +112,27 @@ def profile_update(request):
       }
 
     return render(request, 'profile/update.html', context)
+
+@login_required
+def profile_fund(request):
+    profile = Profile.objects.get(user=request.user)
+
+    form = PaypalFormView()
+
+    context = {
+        'profile': profile,
+        'form':form,
+        }
+
+    return render(request, 'profile/fund.html', context)
+
+@login_required
+def paypal_success(request):
+    return render(request, 'paypal/success.html')
+
+@login_required
+def paypal_fail(request):
+    return render(request, 'paypal/fail.html')
 
 @login_required
 def research(request):

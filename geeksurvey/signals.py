@@ -4,6 +4,42 @@ from django.dispatch import receiver
 
 from .models import Profile
 
+from paypal.standard.models import ST_PP_COMPLETED
+from paypal.standard.ipn.signals import valid_ipn_received
+
+@receiver(valid_ipn_received)
+def paypal_payment_received(sender, **kwargs):
+    ipn_obj = sender
+    print(ipn_obj)
+    print(ipn_obj.invoice)
+    print(ipn_obj.mc_gross)
+    print(ipn_obj.mc_currency)
+    print(ipn_obj.__dict__())
+    if ipn_obj.payment_status == ST_PP_COMPLETED:
+        # WARNING !
+        # Check that the receiver email is the same we previously
+        # set on the `business` field. (The user could tamper with
+        # that fields on the payment form before it goes to PayPal)
+        if ipn_obj.receiver_email != 'sb-igrnp13847920@business.example.com':
+            # Not a valid payment
+            return
+
+        # ALSO: for the same reason, you need to check the amount
+        # received, `custom` etc. are all what you expect or what
+        # is allowed.
+        try:
+
+            expected_amount = 20
+            assert ipn_obj.mc_gross == expected_amount and ipn_obj.mc_currency == 'USD'
+        except Exception:
+            logger.exception('Paypal ipn_obj data not valid!')
+        else:
+            print("passed tests, saving payment to db")
+            # TODO save payment to db
+
+    else:
+        logger.debug('Paypal payment status not completed: %s' % ipn_obj.payment_status)
+
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
@@ -14,3 +50,4 @@ def create_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
     instance.profile.save()
+

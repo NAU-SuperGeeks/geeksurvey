@@ -1,8 +1,13 @@
 from django import forms
+from django.urls import reverse
+from django.views.generic import FormView
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 from .models import Study
+import random
+
+from paypal.standard.forms import PayPalPaymentsForm
 
 
 class UserRegisterForm(UserCreationForm):
@@ -31,3 +36,22 @@ class StudyCompleteForm(forms.ModelForm):
     class Meta:
         model = Study
         fields = ['completion_code']
+
+class PaypalFormView(FormView):
+    template_name = 'profile/fund.html'
+    form_class = PayPalPaymentsForm
+
+    def get_initial(self):
+        return {
+            # TODO get this from decouple config
+            "business": 'sb-igrnp13847920@business.example.com',
+            "amount": 20,
+            "currency_code": "USD",
+            "item_name": 'Fund GeekSurvey Account',
+            "invoice": 'banana',
+            "notify_url": self.request.build_absolute_uri(reverse('paypal-ipn')),
+            "return_url": self.request.build_absolute_uri(reverse('paypal-return')),
+            "cancel_return": self.request.build_absolute_uri(reverse('paypal-cancel')),
+            "lc": 'EN',
+            "no_shipping": '1',
+        }

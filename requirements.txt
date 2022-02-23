@@ -3,3 +3,5 @@ python-decouple
 django-allauth
 django-crispy-forms
 django-countries
+django-paypal
+
