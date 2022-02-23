@@ -1,5 +1,5 @@
 import uuid
-
+import pytz
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -83,7 +83,6 @@ class Gender(models.TextChoices):
 '''
   End of Profile Fields
 '''
-
 
 class Study(models.Model):
     title = models.CharField(max_length=100)
@@ -200,12 +199,14 @@ class Profile(models.Model):
                               default=Gender.PREFER_NOT_TO_SAY)
 
     def can_enroll(self, study):
-        if datetime.now(timezone.utc) > study.expiry_date or \
-           self.age < study.min_age or \
+        if datetime.now() > study.expiry_date.replace(tzinfo=None):
+            return False
+
+        if self.age < study.min_age or \
            self.age > study.max_age or \
            self.years_of_experience < study.min_yoe or \
            self.years_of_experience > study.max_yoe:
-           return False;
+           return False
 
         if study.req_edu != '' and \
            self.level_of_education != study.req_edu:
@@ -231,4 +232,3 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-

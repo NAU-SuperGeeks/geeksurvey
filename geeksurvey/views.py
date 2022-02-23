@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -7,6 +8,9 @@ from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 from django.views.generic import TemplateView
+from geeksurvey.settings import *
+import smtplib
+import ssl
 
 import json
 
@@ -14,6 +18,8 @@ from .models import Study
 from .models import Profile
 
 from .forms import *
+
+
 
 def index(request):
     return render(request, 'home.html')
@@ -216,6 +222,34 @@ def study_edit(request, study_id):
                 'study_form':study_form}
         return render(request, 'study/update.html', context)
 
+def send_mail_to_users(request, users, study):
+
+    emails = []
+    study_id = study.id
+    for user in users:
+        emails.append(user.email)
+    print(emails)
+    try:
+        email_param = {
+            'subject': 'New Study on GeekSurvey',
+            'message': '',
+            'html_message':
+                f"""
+                    <h2>You are eligable for a study at GeekSurvey!</h2>
+                    <p>Follow this link to the Survey:</p>
+                    <a href="{request.build_absolute_uri(reverse('study_landing_page', 
+                                                                 args=(study_id,)))}">Click here to participate</a>
+
+                """,
+            'from_email': EMAIL_HOST_USER,
+            'recipient_list':emails,
+        }
+        res_mail = send_mail(**email_param)
+    except Exception as e:
+        print(e)
+
+
+
 @login_required
 def study_create(request):
     profile = Profile.objects.get(user=request.user)
@@ -224,6 +258,17 @@ def study_create(request):
         if study_form.is_valid():
             study = Study()
             study_update_helper(request, study, study_form)
+
+            # collect all eligible users
+            all_users = User.objects.all()
+            eligible_users = []
+            for user in all_users:
+                user_profile = Profile.objects.get(user=user)
+                if user_profile.can_enroll(study):
+                    eligible_users.append(user)
+
+            send_mail_to_users(request, eligible_users, study)
+
             messages.success(request, f'Your study has been created!')
             return redirect('research')
     else:

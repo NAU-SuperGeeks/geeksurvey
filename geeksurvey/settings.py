@@ -20,7 +20,11 @@ DEBUG = bool( int( config("GEEKSURVEY_DEBUG") ) )
 print("DEBUG  : " + str(DEBUG))
 
 # email stuff
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+else: 
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = config("GMAIL_APP_USERNAME")
 EMAIL_HOST_PASSWORD = config("GMAIL_APP_PASSWORD")
