@@ -200,11 +200,11 @@ def send_mail_to_users(request, users, study):
     print(emails)
     try:
         email_param = {
-            'subject': 'AN INVITATION TO A STUDY',
+            'subject': 'New Study on GeekSurvey',
             'message': '',
             'html_message':
                 f"""
-                    <h2>You are eligiable for a study at GeekSurvey!</h2>
+                    <h2>You are eligable for a study at GeekSurvey!</h2>
                     <p>Follow this link to the Survey:</p>
                     <a href="{request.build_absolute_uri(reverse('study_landing_page', 
                                                                  args=(study_id,)))}">Click here to participate</a>
