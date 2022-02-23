@@ -1,25 +1,32 @@
-{% extends "base.html" %}
 {% load static %}
 
-{% block base_head %}
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
-  <title>GeekSurvey - Home</title>
-  <link rel="shortcut icon" href="{% static 'gkslogo.png' %}" type="image/x-icon">
-{% endblock %}
-{% block content %}
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include 'include_bootstrap.html' %}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>GeekSurvey - Home</title>
+    <link rel="shortcut icon" href="{% static 'gkslogo.png' %}" type="image/x-icon">
+  </head>
+
   <!-- Logic for when a user visits the home page and is authenticated. -->
   <!-- TODO: Update this once a template has been applied to all other pages. -->
+  <body>
+  {% include 'navbar.html' %}
+
   {% if user.is_authenticated %}
-    <h2> GeekSurvey Home </h2>
-    <hr>
-    <p>Hi {{ user.username }}!</p>
-    <p><a href="{% url 'profile_update' %}"> Complete Your Profile </a></p>
-    <p> <a href="{% url 'participate' %}"> Find Studies </a> </p>
-    <p> <a href="{% url 'study_create' %}"> Create a Study </a> </p>
-    <hr>
-    <p> <a class="btn btn-danger" href="{% url 'account_logout' %}"> log out </a> </p>
+    <div class="container-fluid">
+      <h1> Home </h1>
+      <hr>
+      <p>Hi {{ user.username }}!</p>
+      <p><a href="{% url 'profile_update' %}"> Complete Your Profile </a></p>
+      <p> <a href="{% url 'participate' %}"> Find Studies </a> </p>
+      <p> <a href="{% url 'study_create' %}"> Create a Study </a> </p>
+      <hr>
+      <p> <a class="btn btn-danger" href="{% url 'account_logout' %}"> log out </a> </p>
+    </div>
   <!-- Logic for when a user visits the home page and is NOT authenticated. -->
   {% else %}
     <!--
@@ -138,4 +145,8 @@
         </div>
     </section>
   {% endif %}
-{% endblock %}
+  {% include 'footer.html' %}
+
+</body>
+</html>
+
