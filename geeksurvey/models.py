@@ -159,8 +159,8 @@ class Profile(models.Model):
         if self.age < study.min_age or \
            self.age > study.max_age or \
            self.years_of_experience < study.min_yoe or \
-           self.years_of_experience > study.max_yoe:
-          # datetime.now(timezone.utc) > study.expiry_date:
+           self.years_of_experience > study.max_yoe or \
+           datetime.now(timezone.utc) > study.expiry_date:
 
            return False;
 
