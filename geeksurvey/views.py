@@ -171,7 +171,7 @@ def study_edit(request, study_id):
                 'study_form':study_form}
         return render(request, 'study/update.html', context)
 
-def send_mail_to_users(request, users,  study):
+def send_mail_to_users(request, users, study):
 
     emails = []
     study_id = study.id
@@ -184,11 +184,10 @@ def send_mail_to_users(request, users,  study):
             'message': '',
             'html_message':
                 f"""
-                    <h2>You are eligiable to a study!</h2>
-                    <p>Don't miss your chance to paticipate in a study! </p>
+                    <h2>You are eligiable for a study at GeekSurvey!</h2>
                     <p>Follow this link to the Survey:</p>
                     <a href="{request.build_absolute_uri(reverse('study_landing_page', 
-                                                                 args=(study_id,)))}">Click here to learn more</a>
+                                                                 args=(study_id,)))}">Click here to participate</a>
 
                 """,
             'from_email': EMAIL_HOST_USER,
