@@ -6,16 +6,20 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
-from datetime import datetime, timedelta
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
-from geeksurvey.settings import *
+
+from datetime import datetime, timedelta
 import smtplib
 import ssl
 
+from paypal.standard.forms import PayPalPaymentsForm
+from decouple import config
+
+from geeksurvey.settings import *
 import json
 
-from .models import Study
-from .models import Profile
+from .models import Study, Profile, Payment
 
 from .forms import *
 
@@ -29,17 +33,6 @@ def working(request):
 
 def help(request):
     return render(request, 'help.html')
-
-# payments
-class PaypalReturnView(TemplateView):
-    template_name = 'paypal/success.html'
-
-class PaypalCancelView(TemplateView):
-    template_name = 'paypal/cancel.html'
-
-@login_required
-def payment_fund_account(request):
-    return render(request, 'working.html')
 
 @login_required
 def participate(request):
@@ -121,24 +114,42 @@ def profile_update(request):
 
 @login_required
 def profile_fund(request):
+    payment = Payment(owner=request.user, amount=1)
+    request.session['payment-id'] = str(payment.id)
+
     profile = Profile.objects.get(user=request.user)
 
-    form = PaypalFormView()
+    paypal_dict = {
+            # TODO get this from decouple config
+            "business": config('PAYPAL_BIZ_EMAIL'),
+            "amount": payment.amount,
+            "currency_code": "USD",
+            "item_name": 'Fund GeekSurvey Account',
+            "invoice": str(payment.id),
+            "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+            "return_url": request.build_absolute_uri(reverse('paypal-return')),
+            "cancel_return": request.build_absolute_uri(reverse('paypal-cancel')),
+            "lc": 'EN',
+            "no_shipping": '1',
+        }
 
+    form = PayPalPaymentsForm(initial=paypal_dict)
     context = {
         'profile': profile,
-        'form':form,
+        'form': form,
         }
 
     return render(request, 'profile/fund.html', context)
 
 @login_required
+@csrf_exempt
 def paypal_success(request):
     return render(request, 'paypal/success.html')
 
 @login_required
-def paypal_fail(request):
-    return render(request, 'paypal/fail.html')
+@csrf_exempt
+def paypal_failure(request):
+    return render(request, 'paypal/failure.html')
 
 @login_required
 def research(request):

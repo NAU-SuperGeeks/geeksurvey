@@ -1,7 +1,8 @@
 from django.apps import AppConfig
 
-class UsersConfig(AppConfig):
+class GeekSurveyConfig(AppConfig):
     name = 'geeksurvey'
 
     def ready(self):
         import geeksurvey.signals
+

@@ -37,21 +37,3 @@ class StudyCompleteForm(forms.ModelForm):
         model = Study
         fields = ['completion_code']
 
-class PaypalFormView(FormView):
-    template_name = 'profile/fund.html'
-    form_class = PayPalPaymentsForm
-
-    def get_initial(self):
-        return {
-            # TODO get this from decouple config
-            "business": 'sb-igrnp13847920@business.example.com',
-            "amount": 20,
-            "currency_code": "USD",
-            "item_name": 'Fund GeekSurvey Account',
-            "invoice": 'banana',
-            "notify_url": self.request.build_absolute_uri(reverse('paypal-ipn')),
-            "return_url": self.request.build_absolute_uri(reverse('paypal-return')),
-            "cancel_return": self.request.build_absolute_uri(reverse('paypal-cancel')),
-            "lc": 'EN',
-            "no_shipping": '1',
-        }
