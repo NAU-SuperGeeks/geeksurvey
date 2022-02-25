@@ -1,12 +1,8 @@
 from django import forms
-from django.urls import reverse
-from django.views.generic import FormView
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 from .models import Study
-
-from paypal.standard.forms import PayPalPaymentsForm
 
 
 class UserRegisterForm(UserCreationForm):
