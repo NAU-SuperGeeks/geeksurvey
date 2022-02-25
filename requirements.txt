@@ -1,8 +1,9 @@
 Django==3.2.9
-python-decouple
 django-allauth
 django-crispy-forms
 django-countries
 django-paypal
+python-decouple
+requests
 pytz
 
