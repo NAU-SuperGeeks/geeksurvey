@@ -12,6 +12,7 @@ from django.views.generic import TemplateView
 from datetime import datetime, timedelta
 import smtplib
 import ssl
+import requests
 
 from paypal.standard.forms import PayPalPaymentsForm
 from decouple import config
@@ -114,14 +115,15 @@ def profile_update(request):
 
 @login_required
 def profile_fund(request):
-    payment = Payment(owner=request.user, amount=1)
+    payment = Payment(owner=request.user, amount=125)
+    payment.save()
     request.session['payment-id'] = str(payment.id)
 
     profile = Profile.objects.get(user=request.user)
 
     paypal_dict = {
             # TODO get this from decouple config
-            "business": config('PAYPAL_BIZ_EMAIL'),
+            "business": config('PAYPAL_BIZ_EMAIL_P'),
             "amount": payment.amount,
             "currency_code": "USD",
             "item_name": 'Fund GeekSurvey Account',
@@ -140,6 +142,106 @@ def profile_fund(request):
         }
 
     return render(request, 'profile/fund.html', context)
+
+@login_required
+def profile_claim(request):
+    # GET:
+    # claim.html contains a form where
+    # the user enter their paypal email address
+    # -
+    # POST:
+    # if valid email address, send payment to paypal
+    # from BIZ to user_addr
+    # of amount profile.balance
+    # in IPN, set their balance to 0
+    if request.method == 'GET':
+        profile = Profile.objects.get(user=request.user)
+        form    = ClaimFundsForm()
+        form['email'].label = "Enter a VALID email address for your Paypal account"
+
+        context = {
+                'form': form,
+                'profile': profile,
+                }
+
+        return render(request, 'profile/claim.html', context)
+    elif request.method == 'POST':
+
+        '''
+        Here we manually hit Paypals REST API
+        Watch out for cyber attacks!
+        -
+        To move this to a live payment system,
+            PAYOUT_URL and TOKEN_URL must be changed
+            to paypals real API instead of the
+            sandbox
+        '''
+
+        form = ClaimFundsForm(request.POST)
+        receiver = form['email'].value()
+
+        PAYOUT_URL = "https://api.sandbox.paypal.com/v1/payments/payouts"
+        TOKEN_URL = "https://api-m.sandbox.paypal.com/v1/oauth2/token"
+
+        
+        CLIENT_ID = config("PAYPAL_CLIENT_ID")
+        CLIENT_SECRET = config("PAYPAL_CLIENT_SECRET")
+
+
+        profile = Profile.objects.get(user=request.user)
+
+
+        if profile.balance < 5:
+            return redirect('profile')
+            
+        payment = Payment(owner=request.user, amount=-1*profile.balance)
+        payment.save()
+
+        # GET ACCESS TOKEN
+        headers = { 
+                    "Content-Type": "application/json",
+                    "Accept-Language": "en_US",
+                }
+        payload = {
+                    "grant_type": "client_credentials",
+                }
+
+        r = requests.post(TOKEN_URL, data=payload, headers=headers, auth=(CLIENT_ID,CLIENT_SECRET))
+        data = r.json()
+        access_token = data['access_token']
+
+
+        # SEND PAYMENT
+        amount = float(profile.balance)
+        payload = { 
+                    "sender_batch_header":{
+                        "sender_batch_id":"batch-"+str(payment.id),
+                        "email_subject":"You have a GeekSurvey payout!",
+                        "recipient_type":"EMAIL"
+                      },
+                    "items": [
+                        {
+                          "recipient_type":"EMAIL",
+                          "amount":{
+                            "value":str(amount),
+                            "currency":"USD"
+                            },
+                          "note":"Thanks for your participation!",
+                          "sender_item_id":str(payment.id),
+                          "receiver":receiver
+                        }
+                      ]
+                }
+
+        head = {
+                "Content-Type": "application/json",
+                'Authorization': 'Bearer {}'.format(access_token)
+                }
+        rb = requests.post(PAYOUT_URL, data=json.dumps(payload), headers=head)
+        profile.balance = round(float(profile.balance) - amount, 2)
+        profile.save()
+
+        return redirect('profile')
 
 @login_required
 @csrf_exempt
@@ -293,6 +395,7 @@ def study_create(request):
         return render(request, 'study/update.html', context)
 
 def study_landing_page(request, study_id):
+    # TODO make a way to move funds from account to study
     study = get_object_or_404(Study, pk=study_id)
     owner_profile = Profile.objects.get(user=study.owner)
     context = {
@@ -352,6 +455,8 @@ def study_complete(request, study_id):
         if complete_form.is_valid():
             code_input = complete_form.cleaned_data['completion_code']
             if code_input == study.completion_code:
+                # TODO move compensation amount
+                #      from study balance to user
                 study.completed.add(request.user)
                 study.save()
 

@@ -29,8 +29,8 @@
     <a href="{% url 'account_logout' %}" class="btn btn-danger">Log Out</a>
     <hr>
     <p class="card-text">Balance: ${{ profile.balance }} </p>
-    <a href="{% url 'profile_fund' %}" class="btn btn-primary">Add Funds</a>
-    <a href="{% url 'profile_fund' %}" class="btn btn-danger">Remove Funds</a>
+    <a href="{% url 'paypal_fund' %}" class="btn btn-primary">Add Funds</a>
+    <a href="{% url 'paypal_claim' %}" class="btn btn-danger">Remove Funds</a>
   </div>
 </div>
 
