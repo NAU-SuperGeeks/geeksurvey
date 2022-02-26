@@ -97,7 +97,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'geeksurvey',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -107,6 +106,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_countries',
     'paypal.standard.ipn',
+    'geeksurvey',
+    'payments',
 ]
 
 # paypal sandbox mode
