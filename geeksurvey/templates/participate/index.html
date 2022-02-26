@@ -1,35 +1,39 @@
 {% extends "base.html" %}
 
+{% block extra_head %}
+  <meta name="description" content="View your enrolled, completed, and potential studies."/>
+{% endblock %}
+
 {% block content %}
 
-<h2> Participation Dashboard </h2>
-<hr>
+  <h2> Participation Dashboard </h2>
+  <hr>
 
-<a class="btn btn-primary" href="{% url 'part_discover' %}"> Discover New Studies </a>
-<hr>
-<h3> Your Enrolled Studies </h3>
+  <a class="btn btn-primary" href="{% url 'part_discover' %}"> Discover New Studies </a>
+  <hr>
+  <h3> Your Enrolled Studies </h3>
 
-{% for study in enrolled_studies %}
+  {% for study in enrolled_studies %}
 
-  <p>
-  <a class="btn btn-warning" href="{% url 'study_landing_page' study.id %}">  
-    {{study.title}}
-  </a>
-  </p>
+    <p>
+    <a class="btn btn-warning" href="{% url 'study_landing_page' study.id %}">
+      {{study.title}}
+    </a>
+    </p>
 
-{% endfor %}
+  {% endfor %}
 
-<hr>
-<h3> Your Completed Studies </h3>
+  <hr>
+  <h3> Your Completed Studies </h3>
 
-{% for study in completed_studies %}
+  {% for study in completed_studies %}
 
-  <p>
-  <a class="btn btn-success" href="{% url 'study_landing_page' study.id %}">  
-    {{study.title}}
-  </a>
-  </p>
+    <p>
+    <a class="btn btn-success" href="{% url 'study_landing_page' study.id %}">
+      {{study.title}}
+    </a>
+    </p>
 
-{% endfor %}
+  {% endfor %}
 
 {% endblock %}
