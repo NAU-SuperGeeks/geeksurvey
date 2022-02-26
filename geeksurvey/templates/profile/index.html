@@ -3,15 +3,16 @@
 {% load static %}
 
 {% block extra_head %}
-<style>
-  .card-img-top {
-    max-width:100px;
-    max-height:100px;
-  }
-  .btn {
-    margin:.5rem;
-  }
-</style>
+  <meta name="description" content="Log out or view and edit your profile."/>
+  <style>
+    .card-img-top {
+      max-width:100px;
+      max-height:100px;
+    }
+    .btn {
+      margin:.5rem;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
@@ -32,7 +33,4 @@
     <a href="{% url 'payments_fund' %}" class="btn btn-primary">Add Funds</a>
     <a href="{% url 'payments_claim' %}" class="btn btn-danger">Remove Funds</a>
   </div>
-</div>
-
 {% endblock %}
-
