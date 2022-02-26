@@ -31,3 +31,7 @@ class StudyCompleteForm(forms.ModelForm):
     class Meta:
         model = Study
         fields = ['completion_code']
+
+class ClaimFundsForm(forms.Form):
+        email = forms.EmailField()
+
