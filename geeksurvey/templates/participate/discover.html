@@ -2,24 +2,28 @@
 
 {% load static %}
 
+{% block extra_head %}
+  <meta name="description" content="Discover studies that you are eligible for. Enroll in those that interest you!"/>
+{% endblock %}
+
 {% block content %}
 
-<h2> Studies </h2>
+  <h2> Studies </h2>
 
-<div class="card-group">
-{% for study in studies %}
+  <div class="card-group">
+  {% for study in studies %}
 
-    <div class="card" style="max-width: 18rem;">
-      <img src="{% static 'books.png' %}" class="card-img-top" />
-      <div class="card-body">
-        <h5 class="card-title">{{study.title}}</h5>
-        <p class="card-text">{{ study.description}} </p>
-        <p class="card-text">by @{{study.owner}} </p>
-        <a href="{% url 'study_landing_page' study.id %}" class="btn btn-primary">View</a>
+      <div class="card" style="max-width: 18rem;">
+        <img src="{% static 'books.png' %}" class="card-img-top" />
+        <div class="card-body">
+          <h5 class="card-title">{{study.title}}</h5>
+          <p class="card-text">{{ study.description}} </p>
+          <p class="card-text">by @{{study.owner}} </p>
+          <a href="{% url 'study_landing_page' study.id %}" class="btn btn-primary">View</a>
+        </div>
       </div>
-    </div>
 
-{% endfor %}
-</div>
+  {% endfor %}
+  </div>
 
 {% endblock %}

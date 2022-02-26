@@ -2,16 +2,20 @@
 
 {% load static %}
 
+{% block extra_head %}
+  <meta name="description" content="Create groundbreaking studies with GeekSurvey! View and edit your existing studies."/>
+  <meta name="author" content="SuperGeeks Team"/>
+{% endblock %}
+
 {% block content %}
+  <h2> Research Dashboard </h2>
+  <hr>
+    <p> <a class="btn btn-primary" href="{% url 'study_create' %}"> Create a New Study </a> </p>
+  <hr>
+  <h3> Your Studies </h3>
 
-<h2> Research Dashboard </h2>
-<hr>
-  <p> <a class="btn btn-primary" href="{% url 'study_create' %}"> Create a New Study </a> </p>
-<hr>
-<h3> Your Studies </h3>
-
-<div class="card-group">
-{% for study in studies %}
+  <div class="card-group">
+  {% for study in studies %}
 
     <div class="card" style="max-width: 18rem;">
       <img src="{% static 'books.png' %}" class="card-img-top" />
@@ -23,7 +27,6 @@
       </div>
     </div>
 
-{% endfor %}
-</div>
-
+  {% endfor %}
+  </div>
 {% endblock %}

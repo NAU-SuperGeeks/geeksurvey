@@ -3,36 +3,35 @@
 {% load static %}
 
 {% block extra_head %}
-<style>
-  .card-img-top {
-    max-width:100px;
-    max-height:100px;
-  }
-  .btn {
-    margin:.5rem;
-  }
-</style>
+  <meta name="description" content="Log out or view and edit your profile."/>
+  <style>
+    .card-img-top {
+      max-width:100px;
+      max-height:100px;
+    }
+    .btn {
+      margin:.5rem;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
-<h1>Profile</h1>
-<hr>
-{% load socialaccount %}
-<div class="card">
-  <img src="{% static 'pfp_participant.png' %}" class="card-img-top" />
-  <div class="card-body">
-    <h5 class="card-title">{{ user.username }}</h5>
-    <p class="card-text text-secondary">{{ user.email }} </p>
-    <p class="card-text">{{ profile.bio }} </p>
-    <a href="{% url 'profile_view' user.username %}" class="btn btn-primary">View Full Profile</a>
-    <a href="{% url 'profile_update' %}" class="btn btn-warning">Edit Profile</a>
-    <a href="{% url 'account_logout' %}" class="btn btn-danger">Log Out</a>
-    <hr>
-    <p class="card-text">Balance: ${{ profile.balance }} </p>
-    <a href="{% url 'paypal_fund' %}" class="btn btn-primary">Add Funds</a>
-    <a href="{% url 'paypal_claim' %}" class="btn btn-danger">Remove Funds</a>
+  <h1>Profile</h1>
+  <hr>
+  {% load socialaccount %}
+  <div class="card">
+    <img src="{% static 'pfp_participant.png' %}" class="card-img-top" />
+    <div class="card-body">
+      <h5 class="card-title">{{ user.username }}</h5>
+      <p class="card-text text-secondary">{{ user.email }} </p>
+      <p class="card-text">{{ profile.bio }} </p>
+      <a href="{% url 'profile_view' user.username %}" class="btn btn-primary">View Full Profile</a>
+      <a href="{% url 'profile_update' %}" class="btn btn-warning">Edit Profile</a>
+      <a href="{% url 'account_logout' %}" class="btn btn-danger">Log Out</a>
+      <hr>
+      <p class="card-text">Balance: ${{ profile.balance }} </p>
+      <a href="{% url 'paypal_fund' %}" class="btn btn-primary">Add Funds</a>
+      <a href="{% url 'paypal_claim' %}" class="btn btn-danger">Remove Funds</a>
+    </div>
   </div>
-</div>
-
 {% endblock %}
-
