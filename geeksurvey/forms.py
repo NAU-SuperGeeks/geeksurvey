@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 from .models import Study
 
-
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
 
@@ -21,16 +20,5 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['bio', 'age', 'years_of_experience', 'level_of_education', 'occupation', 'country_of_origin', 'current_location', 'race_and_ethnicity', 'open_source_experience', 'gender']
-
-class StudyUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Study
-        exclude = ['id', 'last_modified', 'enrolled', 'completed', 'owner', 'expiry_date', 'balance']
-
-class StudyCompleteForm(forms.ModelForm):
-    class Meta:
-        model = Study
-        fields = ['completion_code']
-
 
 

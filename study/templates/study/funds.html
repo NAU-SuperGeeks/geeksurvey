@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block extra_head %}
+  <style>
+    table {
+      text-align:left;
+    }
+    td {
+      padding:1em;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<h1> Manage Study Funds </h1>
+
+<table>
+<tr>
+  <td>{{user.username}}</td>
+  <td>${{profile.balance}}</td>
+</tr>
+<tr>
+  <td>{{study.title}}</td>
+  <td>${{study.balance}}</td>
+</tr>
+</table>
+<hr>
+
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+<fieldset class="form-group">
+    <p> Transfer from your account to your study</p>
+
+    {{ funds_form|crispy }} <!-- Study Form -->
+</fieldset>
+<div class="form-group">
+    <button class="btn btn-outline-info" type="submit">Submit</button>
+</div>
+
+<br>
+<p> TIP: Negative amounts will move from your study to your account. </p>
+
+{% endblock %}
+

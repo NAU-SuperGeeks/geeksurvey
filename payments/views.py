@@ -101,11 +101,13 @@ def claim(request):
         form = ClaimFundsForm(request.POST)
         receiver = form['email'].value()
 
-        # Arbitrary minimum claim
+        # Arbitrary claim range
         # because GeekSurvey covers fees for claims
+        # and large values are likely to be exploits
         # This value should be shown in the UI
         MINIMUM_CLAIM = 5
-        if profile.balance < MINIMUM_CLAIM:
+        MAXIMUM_CLAIM = 500
+        if profile.balance < MINIMUM_CLAIM or profile.balance > MAXIMUM_CLAIM:
             return redirect('profile')
             
         payment = Payment(owner=request.user, amount=(-1*profile.balance))

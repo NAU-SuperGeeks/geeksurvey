@@ -108,6 +108,7 @@ INSTALLED_APPS = [
     'django_countries',
     'paypal.standard.ipn',
     'payments',
+    'study',
 ]
 
 # paypal sandbox mode
