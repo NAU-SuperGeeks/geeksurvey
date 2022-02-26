@@ -105,8 +105,12 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.google',
     'crispy_forms',
-    'django_countries'
+    'django_countries',
+    'paypal.standard.ipn',
 ]
+
+# paypal sandbox mode
+PAYPAL_TEST = True
 
 SITE_ID = 1
 

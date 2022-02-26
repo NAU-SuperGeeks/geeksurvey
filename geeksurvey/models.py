@@ -12,6 +12,16 @@ from datetime import datetime
 USD_DECIMAL_NUM = 2
 USD_MAX_DIGITS = 17
 
+class Payment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    owner = models.ForeignKey(User,
+                              related_name="user_payments",
+                              unique=False,
+                              on_delete=models.CASCADE)
+    amount = models.DecimalField(default=0, max_digits=USD_MAX_DIGITS,
+                                    decimal_places=USD_DECIMAL_NUM)
+    paid = models.BooleanField(default=False)
+    
 
 '''
 Define Custom Profile Fields
@@ -232,3 +242,4 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
