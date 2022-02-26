@@ -114,14 +114,18 @@ def profile_update(request):
 
 @login_required
 def profile_fund(request):
-    payment = Payment(owner=request.user, amount=125)
+    # Arbitrary amount reflected in signals.py
+    # set for testing and proof of concept rather than
+    # business purposes
+    # This value must match the expected value in signals.py
+    FUND_AMOUNT = 125
+    payment = Payment(owner=request.user, amount=FUND_AMOUNT)
     payment.save()
     request.session['payment-id'] = str(payment.id)
 
     profile = Profile.objects.get(user=request.user)
 
     paypal_dict = {
-            # TODO get this from decouple config
             "business": config('PAYPAL_BIZ_EMAIL_P'),
             "amount": payment.amount,
             "currency_code": "USD",
@@ -150,9 +154,9 @@ def profile_claim(request):
     # -
     # POST:
     # if valid email address, send payment to paypal
-    # from BIZ to user_addr
-    # of amount profile.balance
-    # in IPN, set their balance to 0
+    #    from BIZ to user_addr
+    #     of amount profile.balance
+    #     and set their balance to 0
     if request.method == 'GET':
         profile = Profile.objects.get(user=request.user)
         form    = ClaimFundsForm()
@@ -175,25 +179,25 @@ def profile_claim(request):
             to paypals real API instead of the
             sandbox
         '''
-
-        form = ClaimFundsForm(request.POST)
-        receiver = form['email'].value()
-
         PAYOUT_URL = "https://api.sandbox.paypal.com/v1/payments/payouts"
         TOKEN_URL = "https://api-m.sandbox.paypal.com/v1/oauth2/token"
-
         
         CLIENT_ID = config("PAYPAL_CLIENT_ID")
         CLIENT_SECRET = config("PAYPAL_CLIENT_SECRET")
 
-
         profile = Profile.objects.get(user=request.user)
 
+        form = ClaimFundsForm(request.POST)
+        receiver = form['email'].value()
 
-        if profile.balance < 5:
+        # Arbitrary minimum claim
+        # because GeekSurvey covers fees for claims
+        # This value should be shown in the UI
+        MINIMUM_CLAIM = 5
+        if profile.balance < MINIMUM_CLAIM:
             return redirect('profile')
             
-        payment = Payment(owner=request.user, amount=-1*profile.balance)
+        payment = Payment(owner=request.user, amount=(-1*profile.balance))
         payment.save()
 
         # GET ACCESS TOKEN
@@ -205,9 +209,9 @@ def profile_claim(request):
                     "grant_type": "client_credentials",
                 }
 
-        r = requests.post(TOKEN_URL, data=payload, headers=headers, auth=(CLIENT_ID,CLIENT_SECRET))
-        data = r.json()
-        access_token = data['access_token']
+        token_response = requests.post(TOKEN_URL, data=payload, headers=headers, auth=(CLIENT_ID,CLIENT_SECRET))
+        token_data = token_response.json()
+        access_token = token_data['access_token']
 
 
         # SEND PAYMENT
@@ -232,11 +236,13 @@ def profile_claim(request):
                       ]
                 }
 
-        head = {
+        headers = {
                 "Content-Type": "application/json",
                 'Authorization': 'Bearer {}'.format(access_token)
                 }
-        rb = requests.post(PAYOUT_URL, data=json.dumps(payload), headers=head)
+        payout_reponse = requests.post(PAYOUT_URL, data=json.dumps(payload), headers=headers)
+        # TODO check if response comes back successful
+        #      otherwise don't change balance
         profile.balance = round(float(profile.balance) - amount, 2)
         profile.save()
 
