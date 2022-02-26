@@ -1,7 +1,12 @@
-
 {% extends "base.html" %}
 {% block content %}
 
 <h1>PAYPAL SUCCESS</h1>
+<hr>
+<p> Your external payment has succeeded. </p>
+<br>
+
+<p> Click <a href="{% url 'profile' %}">here</a> to return to your profile. </p>
+<p> Your balance should be updated shortly. </p>
 
 {% endblock %}

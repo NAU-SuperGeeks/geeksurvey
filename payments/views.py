@@ -151,9 +151,18 @@ def claim(request):
                 "Content-Type": "application/json",
                 'Authorization': 'Bearer {}'.format(access_token)
                 }
-        payout_reponse = requests.post(PAYOUT_URL, data=json.dumps(payload), headers=headers)
-        # TODO check if response comes back successful
-        #      otherwise don't change balance
+
+        # Since this is a batch payment, it is possible to group many users claims together
+        # which could save a serious amount of money in fees
+        payout_response = requests.post(PAYOUT_URL, data=json.dumps(payload), headers=headers)
+
+        # In the sandbox, the above payment is always successful
+        # But paypals live network may reject this kind of payment for various reasons.
+        # For full deployment, there should be another hook in signals.py to listen
+        #   for a notification of this payments success
+        #     (and assert sender_item_id == some payment id in our database)
+        #   and only update our internal balance after the external payment has been verified
+
         profile.balance = round(float(profile.balance) - amount, 2)
         profile.save()
 
