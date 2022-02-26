@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
 
 from paypal.standard.forms import PayPalPaymentsForm
 
@@ -9,6 +10,8 @@ import requests
 import json
 
 from geeksurvey.models import Study, Profile, Payment
+
+from .forms import *
 
 @login_required
 @csrf_exempt
@@ -34,7 +37,7 @@ def fund(request):
     profile = Profile.objects.get(user=request.user)
 
     paypal_dict = {
-            "business": config('PAYPAL_BIZ_EMAIL_P'),
+            "business": config('PAYPAL_BIZ_EMAIL'),
             "amount": payment.amount,
             "currency_code": "USD",
             "item_name": 'Fund GeekSurvey Account',

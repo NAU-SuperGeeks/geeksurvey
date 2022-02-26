@@ -11,6 +11,8 @@ from .models import Profile, Payment, User
 from paypal.standard.models import ST_PP_COMPLETED
 from paypal.standard.ipn.signals import valid_ipn_received
 
+'''
+TODO remove if moving this to the payments app works
 @receiver(valid_ipn_received)
 def handle_payment(sender, **kwargs):
     ipn_obj = sender
@@ -53,6 +55,8 @@ def handle_payment(sender, **kwargs):
             payment.save()
     else:
         return
+'''
+
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):

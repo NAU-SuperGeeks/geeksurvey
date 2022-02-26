@@ -7,7 +7,7 @@ from decouple import config
 
 import uuid
 
-from .models import Profile, Payment
+from geeksurvey.models import Profile, Payment
 
 
 @receiver(valid_ipn_received)
@@ -19,7 +19,7 @@ def handle_payment(sender, **kwargs):
         # Check that the receiver email is the same we previously
         # set on the `business` field. (The user could tamper with
         # that fields on the payment form before it goes to PayPal)
-        if ipn_obj.receiver_email != config('PAYPAL_BIZ_EMAIL_P'):
+        if ipn_obj.receiver_email != config('PAYPAL_BIZ_EMAIL'):
             # Not a valid payment
             return
 

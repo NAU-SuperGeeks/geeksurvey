@@ -32,6 +32,5 @@ class StudyCompleteForm(forms.ModelForm):
         model = Study
         fields = ['completion_code']
 
-class ClaimFundsForm(forms.Form):
-        email = forms.EmailField()
+
 

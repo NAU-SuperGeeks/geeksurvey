@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'geeksurvey',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -106,7 +107,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_countries',
     'paypal.standard.ipn',
-    'geeksurvey',
     'payments',
 ]
 
