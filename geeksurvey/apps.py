@@ -5,4 +5,5 @@ class GeekSurveyConfig(AppConfig):
 
     def ready(self):
         import geeksurvey.signals
+        import payments.signals
 

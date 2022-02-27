@@ -6,25 +6,25 @@
 <!-- Responsive Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container px-5">
-    <img src="{% static 'gkslogo.png' %}" width="50px" height="50px">
-    <a class="navbar-brand" href="{% url 'home' %}">GeekSurvey</a>
+    <img src="{% static 'gkslogo_dark.png' %}" width="50px" height="50px">
+    <a class="navbar-brand " href="{% url 'home' %}">GeekSurvey</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a></li>
-            <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
-              {% if user.is_authenticated %}
-                @{{ user.username }}
-              {% else %}
-                Profile
-              {% endif %}
-            </a></li>
-            <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'research' %}active{% endif %}" href="{% url 'research' %}">Research</a></li>
-            <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'participate' %}active{% endif %}" href="{% url 'participate' %}">Participate</a></li>
-        </ul>
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
+          {% if user.is_authenticated %}
+            @{{ user.username }}
+          {% else %}
+            Profile
+          {% endif %}
+        </a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'research' %}active{% endif %}" href="{% url 'research' %}">Research</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'participate' %}active{% endif %}" href="{% url 'participate' %}">Participate</a></li>
+      </ul>
     </div>
   </div>
 </nav>
