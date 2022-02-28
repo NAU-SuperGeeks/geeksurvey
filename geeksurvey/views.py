@@ -95,6 +95,8 @@ def profile_update(request):
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
+        p_form['open_source_experience'].label = "Experienced With Open Source Development?"
+
     context = {
         'profile': profile,
         'u_form': u_form,
