@@ -56,7 +56,7 @@ def study_custom_labels(study_form):
     study_form['req_job'].label = "Required Occupation"
     study_form['req_rne'].label = "Required Race / Ethnicity"
     study_form['req_sex'].label = "Required Gender"
-    study_form['req_oss'].label = "Require Experience With Open Source?"
+    study_form['req_oss'].label = "Require Experience With Open Source Development?"
 
 @login_required
 def study_edit(request, study_id):
