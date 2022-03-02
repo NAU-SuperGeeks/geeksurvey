@@ -8,25 +8,27 @@ from django.shortcuts import render, get_object_or_404, redirect
 from geeksurvey.models import Study, Profile, User
 
 from datetime import datetime, timedelta
+from django.utils import timezone
 
 from .forms import *
 
 def study_update_helper(request, study, study_form):
-    title      = study_form.cleaned_data['title']
-    descr      = study_form.cleaned_data['description']
-    code       = study_form.cleaned_data['completion_code']
-    survey     = study_form.cleaned_data['survey_url']
-    comp       = study_form.cleaned_data['compensation']
-    min_age    = study_form.cleaned_data['min_age']
-    max_age    = study_form.cleaned_data['max_age']
-    min_yoe    = study_form.cleaned_data['min_yoe']
-    max_yoe    = study_form.cleaned_data['max_yoe']
-    max_nop    = study_form.cleaned_data['max_nop']
-    req_edu    = study_form.cleaned_data['req_edu']
-    req_job    = study_form.cleaned_data['req_job']
-    req_rne    = study_form.cleaned_data['req_rne']
-    req_sex    = study_form.cleaned_data['req_sex']
-    req_oss    = study_form.cleaned_data['req_oss']
+    title       = study_form.cleaned_data['title']
+    descr       = study_form.cleaned_data['description']
+    code        = study_form.cleaned_data['completion_code']
+    survey      = study_form.cleaned_data['survey_url']
+    comp        = study_form.cleaned_data['compensation']
+    min_age     = study_form.cleaned_data['min_age']
+    max_age     = study_form.cleaned_data['max_age']
+    min_yoe     = study_form.cleaned_data['min_yoe']
+    max_yoe     = study_form.cleaned_data['max_yoe']
+    max_nop     = study_form.cleaned_data['max_nop']
+    req_edu     = study_form.cleaned_data['req_edu']
+    req_job     = study_form.cleaned_data['req_job']
+    req_rne     = study_form.cleaned_data['req_rne']
+    req_sex     = study_form.cleaned_data['req_sex']
+    req_oss     = study_form.cleaned_data['req_oss']
+    expiry_date = study_form.cleaned_data['expiry_date']
     study.owner           = request.user
     study.title           = title
     study.description     = descr
@@ -43,8 +45,8 @@ def study_update_helper(request, study, study_form):
     study.req_rne         = req_rne
     study.req_sex         = req_sex
     study.req_oss         = req_oss
-    study.last_modified   = datetime.now()
-    study.expiry_date     = datetime.now()+timedelta(days=365)
+    study.last_modified   = timezone.make_aware(datetime.now())
+    study.expiry_date     = expiry_date
     study.save()
 
 def study_custom_labels(study_form):
@@ -174,7 +176,7 @@ def study_create(request):
             send_mail_to_users(request, eligible_users, study)
 
             messages.success(request, f'Your study has been created!')
-            return redirect('research')
+        return redirect('research')
     else:
         study_form = StudyUpdateForm(instance=Study())
 
