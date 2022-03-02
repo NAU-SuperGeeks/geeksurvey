@@ -173,7 +173,7 @@ def study_create(request):
             send_mail_to_users(request, eligible_users, study)
 
             messages.success(request, f'Your study has been created!')
-            return redirect('research')
+        return redirect('research')
     else:
         study_form = StudyUpdateForm(instance=Study())
 
