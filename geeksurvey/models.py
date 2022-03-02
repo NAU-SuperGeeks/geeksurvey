@@ -131,6 +131,8 @@ class Study(models.Model):
     min_yoe = models.PositiveSmallIntegerField(default=0, blank=True)
     max_yoe = models.PositiveSmallIntegerField(default=150, blank=True)
 
+    max_nop = models.PositiveSmallIntegerField(default=1, blank=True)
+
     req_edu = models.CharField(max_length=7,
                                 choices=LevelOfEducation.choices,
                                 default=LevelOfEducation.NONE,
@@ -241,6 +243,10 @@ class Profile(models.Model):
         if study.req_oss == 'Y' and \
            self.open_source_experience == 'N':
            return False
+
+        if study.enrolled.count() >= study.max_nop:
+            return False
+
 
         return True;
 

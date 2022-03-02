@@ -22,6 +22,7 @@ def study_update_helper(request, study, study_form):
     max_age     = study_form.cleaned_data['max_age']
     min_yoe     = study_form.cleaned_data['min_yoe']
     max_yoe     = study_form.cleaned_data['max_yoe']
+    max_nop     = study_form.cleaned_data['max_nop']
     req_edu     = study_form.cleaned_data['req_edu']
     req_job     = study_form.cleaned_data['req_job']
     req_rne     = study_form.cleaned_data['req_rne']
@@ -38,6 +39,7 @@ def study_update_helper(request, study, study_form):
     study.max_age         = max_age
     study.min_yoe         = min_yoe
     study.max_yoe         = max_yoe
+    study.max_nop         = max_nop
     study.req_edu         = req_edu
     study.req_job         = req_job
     study.req_rne         = req_rne
@@ -49,16 +51,17 @@ def study_update_helper(request, study, study_form):
 
 def study_custom_labels(study_form):
     study_form['compensation'].label = "Compensation (USD)"
-    study_form['survey_url'].label   = "Survey URL"
-    study_form['min_age'].label      = "Minimum Age for Participants"
-    study_form['max_age'].label      = "Maximum Age for Participants"
-    study_form['min_yoe'].label      = "Minimum Years of Experience"
-    study_form['max_yoe'].label      = "Maximum Years of Experience"
-    study_form['req_edu'].label      = "Required Education"
-    study_form['req_job'].label      = "Required Occupation"
-    study_form['req_rne'].label      = "Required Race / Ethnicity"
-    study_form['req_sex'].label      = "Required Gender"
-    study_form['req_oss'].label      = "Require Experience With Open Source Development?"
+    study_form['survey_url'].label = "Survey URL"
+    study_form['min_age'].label = "Minimum Age for Participants"
+    study_form['max_age'].label = "Maximum Age for Participants"
+    study_form['min_yoe'].label = "Minimum Years of Experience"
+    study_form['max_yoe'].label = "Maximum Years of Experience"
+    study_form['max_nop'].label = "Maximum Number of Participants"
+    study_form['req_edu'].label = "Required Education"
+    study_form['req_job'].label = "Required Occupation"
+    study_form['req_rne'].label = "Required Race / Ethnicity"
+    study_form['req_sex'].label = "Required Gender"
+    study_form['req_oss'].label = "Require Experience With Open Source Development?"
 
 @login_required
 def study_edit(request, study_id):
