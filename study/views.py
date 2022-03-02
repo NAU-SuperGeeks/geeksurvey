@@ -101,7 +101,7 @@ def study_funds(request, study_id):
                float(study.balance) + amount < 0:
               # fail (do nothing)
               return redirect('study_funds', study_id)
-            
+
             # NOTE beware anywhere that moves logical funds.
             # there could be exploits here (like overflow error)
             # that allow users to get free logical funds
@@ -109,7 +109,7 @@ def study_funds(request, study_id):
             study.balance = round(float(study.balance) + amount, 2)
             profile.save()
             study.save()
-            
+
             return redirect('study_funds', study_id)
         return redirect('study_funds', study_id)
     else:
@@ -139,7 +139,7 @@ def send_mail_to_users(request, users, study):
                 f"""
                     <h2>You are eligable for a study at GeekSurvey!</h2>
                     <p>Follow this link to the Survey:</p>
-                    <a href="{request.build_absolute_uri(reverse('study_landing_page', 
+                    <a href="{request.build_absolute_uri(reverse('study_landing_page',
                                                                  args=(study_id,)))}">Click here to participate</a>
 
                 """,
@@ -181,6 +181,23 @@ def study_create(request):
         context={'profile':profile,
                  'study_form':study_form}
         return render(request, 'study/update.html', context)
+
+@login_required
+def study_delete(request, study_id):
+    study = get_object_or_404(Study, pk=study_id)
+    owner_profile = Profile.objects.get(user=study.owner)
+
+    if request.method == 'POST':
+        study.delete()
+        return redirect('research')
+
+    context ={
+        'user':request.user,
+        'study':study,
+        'owner_profile':owner_profile
+        }
+
+    return render(request, 'study/delete.html', context)
 
 def study_landing_page(request, study_id):
     # TODO make a way to move funds from account to study
@@ -232,7 +249,7 @@ def study_enroll_fail(request, study_id):
 def study_complete(request, study_id):
     if request.method == 'POST':
         study = get_object_or_404(Study, pk=study_id)
-        
+
         # assert study has proper funds
         if study.balance < study.compensation:
             # TODO use messages to show user why they couldn't complete
@@ -265,4 +282,3 @@ def study_complete(request, study_id):
         complete_form = StudyCompleteForm(instance=study)
         context = {'study':study, 'complete_form':complete_form}
         return render(request, 'study/complete.html', context)
-
