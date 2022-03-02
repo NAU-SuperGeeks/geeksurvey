@@ -98,7 +98,7 @@ class Study(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=400)
     last_modified = models.DateTimeField(auto_now_add=True)
-    expiry_date = models.DateTimeField('expiry date')
+    expiry_date = models.DateField('expiry date')
     balance = models.DecimalField(default=0, max_digits=USD_MAX_DIGITS,
                                     decimal_places=USD_DECIMAL_NUM)
     compensation = models.DecimalField(default=0, max_digits=USD_MAX_DIGITS,
@@ -209,7 +209,11 @@ class Profile(models.Model):
                               default=Gender.PREFER_NOT_TO_SAY)
 
     def can_enroll(self, study):
-        if datetime.now() > study.expiry_date.replace(tzinfo=None):
+        expiry_with_time = datetime(
+              year=study.expiry_date.year,
+              month=study.expiry_date.month,
+              day=study.expiry_date.day)
+        if datetime.now() > expiry_with_time:
             return False
 
         if self.age < study.min_age or \
