@@ -21,7 +21,7 @@ class Payment(models.Model):
     amount = models.DecimalField(default=0, max_digits=USD_MAX_DIGITS,
                                     decimal_places=USD_DECIMAL_NUM)
     paid = models.BooleanField(default=False)
-    
+
 
 '''
 Define Custom Profile Fields
@@ -242,4 +242,3 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-
