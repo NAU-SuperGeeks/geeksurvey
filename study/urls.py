@@ -25,5 +25,5 @@ urlpatterns = [
     path('edit/<uuid:study_id>/', views.study_edit, name='study_edit'),
     path('funds/<uuid:study_id>/', views.study_funds, name='study_funds'),
     path('create/', views.study_create, name='study_create'),
+    path('delete/<uuid:study_id>/', views.study_delete, name='study_delete')
 ]
-

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1> Study Deletion Page </h1>
+<p> Are you sure you want to delete <strong>{{study.title}}</strong>?</p>
+<p> WARNING: This action cannot be undone. Make sure you don't have funds in this study </p>
+
+<form action="{% url 'study_delete' study.id %}" method="POST">
+    {% csrf_token %}
+    <input class="btn btn-outline-danger" type="submit" value="Confirm">
+</form>
+
+{% endblock %}
