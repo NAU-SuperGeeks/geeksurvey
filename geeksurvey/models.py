@@ -21,7 +21,7 @@ class Payment(models.Model):
     amount = models.DecimalField(default=0, max_digits=USD_MAX_DIGITS,
                                     decimal_places=USD_DECIMAL_NUM)
     paid = models.BooleanField(default=False)
-    
+
 
 '''
 Define Custom Profile Fields
@@ -131,6 +131,8 @@ class Study(models.Model):
     min_yoe = models.PositiveSmallIntegerField(default=0, blank=True)
     max_yoe = models.PositiveSmallIntegerField(default=150, blank=True)
 
+    max_nop = models.PositiveSmallIntegerField(default=1, blank=True)
+
     req_edu = models.CharField(max_length=7,
                                 choices=LevelOfEducation.choices,
                                 default=LevelOfEducation.NONE,
@@ -238,8 +240,11 @@ class Profile(models.Model):
            self.open_source_experience == 'N':
            return False
 
+        if study.enrolled.count() >= study.max_nop:
+            return False
+
+
         return True;
 
     def __str__(self):
         return self.user.username
-
