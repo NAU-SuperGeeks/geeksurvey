@@ -96,6 +96,7 @@ def profile_update(request):
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
         p_form['open_source_experience'].label = "Experienced With Open Source Development?"
+        p_form['email_opt_in'].label = "Opt In For Email Notifications?"
 
     context = {
         'profile': profile,
@@ -116,4 +117,3 @@ def research(request):
         'studies':studies
       }
     return render(request, 'research/index.html', context)
-

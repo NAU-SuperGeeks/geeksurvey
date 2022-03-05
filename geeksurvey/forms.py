@@ -19,6 +19,4 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['bio', 'age', 'years_of_experience', 'level_of_education', 'occupation', 'country_of_origin', 'current_location', 'race_and_ethnicity', 'open_source_experience', 'gender']
-
-
+        fields = ['bio', 'age', 'years_of_experience', 'level_of_education', 'occupation', 'country_of_origin', 'current_location', 'race_and_ethnicity', 'open_source_experience', 'gender', 'email_opt_in']
