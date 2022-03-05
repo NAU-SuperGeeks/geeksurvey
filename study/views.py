@@ -1,68 +1,17 @@
-from django.core.mail import send_mail
+from django.utils import timezone
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
-from geeksurvey.models import Study, Profile, User
-from geeksurvey.settings import *
 
-from datetime import datetime, timedelta
-from django.utils import timezone
+from geeksurvey.models import Study, Profile, User
+
+from datetime import datetime
 
 from .forms import *
+from .utils import *
 
-def study_update_helper(request, study, study_form):
-    title       = study_form.cleaned_data['title']
-    descr       = study_form.cleaned_data['description']
-    code        = study_form.cleaned_data['completion_code']
-    survey      = study_form.cleaned_data['survey_url']
-    comp        = study_form.cleaned_data['compensation']
-    min_age     = study_form.cleaned_data['min_age']
-    max_age     = study_form.cleaned_data['max_age']
-    min_yoe     = study_form.cleaned_data['min_yoe']
-    max_yoe     = study_form.cleaned_data['max_yoe']
-    max_nop     = study_form.cleaned_data['max_nop']
-    req_edu     = study_form.cleaned_data['req_edu']
-    req_job     = study_form.cleaned_data['req_job']
-    req_rne     = study_form.cleaned_data['req_rne']
-    req_sex     = study_form.cleaned_data['req_sex']
-    req_oss     = study_form.cleaned_data['req_oss']
-    expiry_date = study_form.cleaned_data['expiry_date']
-    study.owner           = request.user
-    study.title           = title
-    study.description     = descr
-    study.completion_code = code
-    study.survey_url      = survey
-    study.compensation    = comp
-    study.min_age         = min_age
-    study.max_age         = max_age
-    study.min_yoe         = min_yoe
-    study.max_yoe         = max_yoe
-    study.max_nop         = max_nop
-    study.req_edu         = req_edu
-    study.req_job         = req_job
-    study.req_rne         = req_rne
-    study.req_sex         = req_sex
-    study.req_oss         = req_oss
-    study.last_modified   = timezone.make_aware(datetime.now())
-    study.expiry_date     = expiry_date
-    study.save()
-
-def study_custom_labels(study_form):
-    study_form['compensation'].label = "Compensation (USD)"
-    study_form['survey_url'].label = "Survey URL"
-    study_form['min_age'].label = "Minimum Age for Participants"
-    study_form['max_age'].label = "Maximum Age for Participants"
-    study_form['min_yoe'].label = "Minimum Years of Experience"
-    study_form['max_yoe'].label = "Maximum Years of Experience"
-    study_form['max_nop'].label = "Maximum Number of Participants"
-    study_form['req_edu'].label = "Required Education"
-    study_form['req_job'].label = "Required Occupation"
-    study_form['req_rne'].label = "Required Race / Ethnicity"
-    study_form['req_sex'].label = "Required Gender"
-    study_form['req_oss'].label = "Require Experience With Open Source Development?"
 
 @login_required
 def study_edit(request, study_id):
@@ -72,10 +21,9 @@ def study_edit(request, study_id):
 
     profile = Profile.objects.get(user=request.user)
     if request.method == 'POST':
-        study_form = StudyUpdateForm(request.POST, instance=request.user)
+        study_form = StudyUpdateForm(request.POST, instance=study)
         if study_form.is_valid():
-            study_update_helper(request, study, study_form)
-            messages.success(request, f'Your study has been updated!')
+            study_form.save()
             return redirect('research')
     else:
         study_form = StudyUpdateForm(instance=study)
@@ -84,8 +32,50 @@ def study_edit(request, study_id):
         study_custom_labels(study_form)
 
         context={'profile':profile,
-                'study_form':study_form}
+                 'study_form':study_form}
         return render(request, 'study/update.html', context)
+
+
+@login_required
+def study_create(request):
+    profile = Profile.objects.get(user=request.user)
+    if request.method == 'POST':
+        study_form = StudyUpdateForm(request.POST)
+        if study_form.is_valid():
+            study = study_form.save(commit=False)
+            study.owner = request.user
+            study.save()
+
+            study_send_mail(request, study)
+
+        return redirect('research')
+    else:
+        study = Study()
+        study_form = StudyUpdateForm(instance=study)
+
+        # define custom labels for the form
+        study_custom_labels(study_form)
+
+        context={'profile':profile,
+                 'study_form':study_form}
+        return render(request, 'study/update.html', context)
+
+@login_required
+def study_delete(request, study_id):
+    study = get_object_or_404(Study, pk=study_id)
+    owner_profile = Profile.objects.get(user=study.owner)
+
+    if request.method == 'POST':
+        study.delete()
+        return redirect('research')
+
+    context ={
+        'user':request.user,
+        'study':study,
+        'owner_profile':owner_profile
+        }
+
+    return render(request, 'study/delete.html', context)
 
 @login_required
 def study_funds(request, study_id):
@@ -130,81 +120,6 @@ def study_funds(request, study_id):
 
         return render(request, 'study/funds.html', context)
 
-def send_mail_to_users(request, users, study):
-
-    emails = []
-    study_id = study.id
-    for user in users:
-        profile = Profile.objects.get(user=user)
-        if(profile.email_opt_in == 'Y'):
-            emails.append(user.email)
-    try:
-        email_param = {
-            'subject': 'New Study on GeekSurvey',
-            'message': '',
-            'html_message':
-                f"""
-                    <h2>You are eligible for a study at GeekSurvey!</h2>
-                    <p>Follow this link to the Survey:</p>
-                    <a href="{request.build_absolute_uri(reverse('study_landing_page',
-                                                                 args=(study_id,)))}">Click here to participate</a>
-
-                """,
-            'from_email': EMAIL_HOST_USER,
-            'recipient_list':emails,
-        }
-        res_mail = send_mail(**email_param)
-    except Exception as e:
-        print(e)
-
-
-@login_required
-def study_create(request):
-    profile = Profile.objects.get(user=request.user)
-    if request.method == 'POST':
-        study_form = StudyUpdateForm(request.POST, instance=request.user)
-        if study_form.is_valid():
-            study = Study()
-            study_update_helper(request, study, study_form)
-
-            # collect all eligible users
-            all_users = User.objects.all()
-            eligible_users = []
-            for user in all_users:
-                user_profile = Profile.objects.get(user=user)
-                if user_profile.can_enroll(study):
-                    eligible_users.append(user)
-
-            send_mail_to_users(request, eligible_users, study)
-
-            messages.success(request, f'Your study has been created!')
-        return redirect('research')
-    else:
-        study_form = StudyUpdateForm(instance=Study())
-
-        # define custom labels for the form
-        study_custom_labels(study_form)
-
-        context={'profile':profile,
-                 'study_form':study_form}
-        return render(request, 'study/update.html', context)
-
-@login_required
-def study_delete(request, study_id):
-    study = get_object_or_404(Study, pk=study_id)
-    owner_profile = Profile.objects.get(user=study.owner)
-
-    if request.method == 'POST':
-        study.delete()
-        return redirect('research')
-
-    context ={
-        'user':request.user,
-        'study':study,
-        'owner_profile':owner_profile
-        }
-
-    return render(request, 'study/delete.html', context)
 
 def study_landing_page(request, study_id):
     # TODO make a way to move funds from account to study

@@ -101,7 +101,7 @@ class EmailOptIn(models.TextChoices):
 class Study(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=400)
-    last_modified = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
     expiry_date = models.DateField('expiry date')
     balance = models.DecimalField(default=0, max_digits=USD_MAX_DIGITS,
                                     decimal_places=USD_DECIMAL_NUM)
