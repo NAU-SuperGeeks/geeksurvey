@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from geeksurvey.models import Study, Profile, User
+from geeksurvey.settings import *
 
 from datetime import datetime, timedelta
 from django.utils import timezone
@@ -134,15 +135,16 @@ def send_mail_to_users(request, users, study):
     emails = []
     study_id = study.id
     for user in users:
-        emails.append(user.email)
-    print(emails)
+        profile = Profile.objects.get(user=user)
+        if(profile.email_opt_in == 'Y'):
+            emails.append(user.email)
     try:
         email_param = {
             'subject': 'New Study on GeekSurvey',
             'message': '',
             'html_message':
                 f"""
-                    <h2>You are eligable for a study at GeekSurvey!</h2>
+                    <h2>You are eligible for a study at GeekSurvey!</h2>
                     <p>Follow this link to the Survey:</p>
                     <a href="{request.build_absolute_uri(reverse('study_landing_page',
                                                                  args=(study_id,)))}">Click here to participate</a>

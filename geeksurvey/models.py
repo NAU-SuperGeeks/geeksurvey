@@ -90,6 +90,10 @@ class Gender(models.TextChoices):
     NONBINARY_GENDERQUEER_GENDER_NONCONFORMING = 'NGGN', _('Non-binary/Genderqueer/Gender Non-conforming')
     PREFER_NOT_TO_SAY                          = 'PNTS', _('Prefer Not to Say')
 
+class EmailOptIn(models.TextChoices):
+    YES = 'Y', _('Yes')
+    NO  = 'N', _('No')
+
 '''
   End of Profile Fields
 '''
@@ -209,6 +213,11 @@ class Profile(models.Model):
     gender = models.CharField(max_length=4,
                               choices=Gender.choices,
                               default=Gender.PREFER_NOT_TO_SAY)
+
+    # Adds email communication preference as a choosable field for the user profile.
+    email_opt_in = models.CharField(max_length=1,
+                                    choices=EmailOptIn.choices,
+                                    default=EmailOptIn.NO)
 
     def can_enroll(self, study):
         expiry_with_time = datetime(
