@@ -29,7 +29,6 @@ def study_send_mail(request, study):
            study.owner != user:
             emails.append(user.email)
 
-    print([study.title + " SENDING MAIL TO ", emails])
     if emails == []: return
 
     study_url = request.build_absolute_uri(reverse('study_landing_page', args=(study.id,)))
