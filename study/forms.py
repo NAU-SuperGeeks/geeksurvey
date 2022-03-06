@@ -23,3 +23,4 @@ class StudyCompleteForm(forms.ModelForm):
 
 class StudyFundsForm(forms.Form):
     amount = forms.DecimalField()
+
