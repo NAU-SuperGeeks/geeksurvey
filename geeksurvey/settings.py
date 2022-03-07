@@ -104,11 +104,15 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.google',
     'crispy_forms',
+    'crispy_bootstrap5',
     'django_countries',
     'paypal.standard.ipn',
     'payments',
     'study',
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # paypal sandbox mode
 PAYPAL_TEST = True

@@ -16,29 +16,18 @@
   <body class="d-flex flex-column min-vh-100">
   {% include 'navbar.html' %}
 
-  {% if user.is_authenticated %}
-    <div class="container-fluid" style="margin-top:1em;">
-      <h1> Home </h1>
-      <hr>
-      <p>Hi {{ user.username }}!</p>
-      <p><a href="{% url 'profile_update' %}"> Complete Your Profile </a></p>
-      <p> <a href="{% url 'participate' %}"> Find Studies </a> </p>
-      <p> <a href="{% url 'study_create' %}"> Create a Study </a> </p>
-      <hr>
-      <p> <a class="btn btn-danger" href="{% url 'account_logout' %}"> log out </a> </p>
-    </div>
-  <!-- Logic for when a user visits the home page and is NOT authenticated. -->
-  {% else %}
-    <!--
-        Elements of the following code are derived from the Start Bootstrap - Business Frontpage v.5.0.7 Template.
-        The template is licensed under MIT and can be found at https://github.com/StartBootstrap/startbootstrap-business-frontpage/blob/master/LICENSE.
-    -->
-    <!-- Business Header -->
-    <header class="bg-dark py-5">
-      <div class="container px-5">
-        <div class="row gx-5 justify-content-center">
-          <div class="col-lg-6">
-            <img class="mx-auto d-block" src="{% static 'gkslogo.png' %}" width="200px" height="200px">
+
+  <!--
+      Elements of the following code are derived from the Start Bootstrap - Business Frontpage v.5.0.7 Template.
+      The template is licensed under MIT and can be found at https://github.com/StartBootstrap/startbootstrap-business-frontpage/blob/master/LICENSE.
+  -->
+  <!-- Business Header -->
+  <header class="bg-dark py-5">
+    <div class="container px-5">
+      <div class="row gx-5 justify-content-center">
+        <div class="col-lg-6">
+          <img class="mx-auto d-block" src="{% static 'gkslogo.png' %}" width="200px" height="200px">
+          {% if not user.is_authenticated %}
             <div class="text-center my-5">
               <h1 class="display-5 fw-bolder text-white mb-2">Revolutionizing Software Engineering Research</h1>
               <p class="lead text-white-50 mb-4">
@@ -49,60 +38,62 @@
                 <a class="btn btn-outline-light btn-lg px-4" href="#features">Learn More</a>
               </div>
             </div>
-          </div>
+          {% endif %}
         </div>
       </div>
-    </header>
-    <!--
-        Elements of the following code are derived from the Start Bootstrap - Business Frontpage v.5.0.7 Template.
-        The template is licensed under MIT and can be found at https://github.com/StartBootstrap/startbootstrap-business-frontpage/blob/master/LICENSE.
-    -->
-    <!-- Features Section -->
-    <section class="py-5 border-bottom" id="features">
-      <div class="container px-5 my-5">
-        <div class="row gx-5">
-          <div class="col-lg-4 mb-5 mb-lg-0">
-            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
-            <h2 class="h4 fw-bolder">Customize your profile</h2>
-            <p>
-              Provide information about you and your skills! The more you customize your profile, the more studies you will be eligible for.
-            </p>
-            <a class="text-decoration-none" href="{% url 'profile_update' %}">
-                Edit your profile
-                <i class="bi bi-arrow-right"></i>
-            </a>
-          </div>
-          <div class="col-lg-4 mb-5 mb-lg-0">
-            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-building"></i></div>
-            <h2 class="h4 fw-bolder">Create research studies</h2>
-            <p>
-              Find quality participants by filling out our research study form with desired traits and inserting your external survey platform link.
-            </p>
-            <a class="text-decoration-none" href="{% url 'study_create' %}">
-                Create a study now
-                <i class="bi bi-arrow-right"></i>
-            </a>
-          </div>
-          <div class="col-lg-4">
-            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
-            <h2 class="h4 fw-bolder">Participate in studies</h2>
-            <p>
-              Make a difference by enrolling in studies that interest you! Receive compensation for your valuable time and responses.
-            </p>
-            <a class="text-decoration-none" href="{% url 'participate' %}">
-                Start participating
-                <i class="bi bi-arrow-right"></i>
-            </a>
-          </div>
+    </div>
+  </header>
+  <!--
+      Elements of the following code are derived from the Start Bootstrap - Business Frontpage v.5.0.7 Template.
+      The template is licensed under MIT and can be found at https://github.com/StartBootstrap/startbootstrap-business-frontpage/blob/master/LICENSE.
+  -->
+  <!-- Features Section -->
+  <section class="py-5 border-bottom" id="features">
+    <div class="container px-5 my-5">
+      <div class="row gx-5">
+        <div class="col-lg-4 mb-5 mb-lg-0">
+          <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
+          <h2 class="h4 fw-bolder">Customize your profile</h2>
+          <p>
+            Provide information about you and your skills! The more you customize your profile, the more studies you will be eligible for.
+          </p>
+          <a class="text-decoration-none" href="{% url 'profile_update' %}">
+              Edit your profile
+              <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+        <div class="col-lg-4 mb-5 mb-lg-0">
+          <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-building"></i></div>
+          <h2 class="h4 fw-bolder">Create research studies</h2>
+          <p>
+            Find quality participants by filling out our research study form with desired traits and inserting your external survey platform link.
+          </p>
+          <a class="text-decoration-none" href="{% url 'study_create' %}">
+              Create a study now
+              <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+        <div class="col-lg-4">
+          <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
+          <h2 class="h4 fw-bolder">Participate in studies</h2>
+          <p>
+            Make a difference by enrolling in studies that interest you! Receive compensation for your valuable time and responses.
+          </p>
+          <a class="text-decoration-none" href="{% url 'participate' %}">
+              Start participating
+              <i class="bi bi-arrow-right"></i>
+          </a>
         </div>
       </div>
-    </section>
-    <!--
-        Elements of the following code are derived from the Start Bootstrap - Business Frontpage v.5.0.7 Template.
-        The template is licensed under MIT and can be found at https://github.com/StartBootstrap/startbootstrap-business-frontpage/blob/master/LICENSE.
-    -->
-    <!-- Testimonials Section -->
-    <!-- TODO: Add actual testimonials to replace template testimonials -->
+    </div>
+  </section>
+  <!--
+      Elements of the following code are derived from the Start Bootstrap - Business Frontpage v.5.0.7 Template.
+      The template is licensed under MIT and can be found at https://github.com/StartBootstrap/startbootstrap-business-frontpage/blob/master/LICENSE.
+  -->
+  <!-- Testimonials Section -->
+  <!-- TODO: Add actual testimonials to replace template testimonials -->
+  {% if not user.is_authenticated %}
     <section class="py-5 border-bottom">
       <div class="container px-5 my-5 px-5">
         <div class="text-center mb-5">

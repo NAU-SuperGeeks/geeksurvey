@@ -13,19 +13,12 @@
   <br>
   <img src="{% static 'books.png' %}" width="100px" />
   <h5> {{study.description}} </h5>
-  <p> Created By: <a href="{% url 'profile_view' study.owner %}"> {{study.owner}} </a> </p>
+  <p> Created By:
+    <a href="{% url 'profile_view' study.owner %}" class="link-primary" style="text-decoration:none;">
+      @{{study.owner}}
+    </a>
+  </p>
 
-  <hr>
-  <p> Enrolled:
-    {% for enrolled_user in study.enrolled.all %}
-    <a href="{% url 'profile_view' enrolled_user %}"> {{ enrolled_user }} </a>,
-    {% endfor %}
-  </p>
-  <p> Completed:
-    {% for completed_user in study.completed.all %}
-    <a href="{% url 'profile_view' completed_user %}"> {{ completed_user }} </a>,
-    {% endfor %}
-  </p>
   <hr>
 
   {% if not request.user in study.enrolled.all %}

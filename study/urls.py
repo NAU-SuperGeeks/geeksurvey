@@ -18,12 +18,14 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
+    path('create/', views.study_create, name='study_create'),
     path('<uuid:study_id>/', views.study_landing_page, name='study_landing_page'),
     path('enroll/<uuid:study_id>/', views.study_enroll, name='study_enroll'),
     path('enroll/<uuid:study_id>/fail/', views.study_enroll_fail, name='study_enroll_fail'),
     path('complete/<uuid:study_id>/', views.study_complete, name='study_complete'),
     path('edit/<uuid:study_id>/', views.study_edit, name='study_edit'),
     path('funds/<uuid:study_id>/', views.study_funds, name='study_funds'),
-    path('create/', views.study_create, name='study_create'),
+    path('participants/<uuid:study_id>/', views.study_participants, name='study_participants'),
     path('delete/<uuid:study_id>/', views.study_delete, name='study_delete')
 ]
+

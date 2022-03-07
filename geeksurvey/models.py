@@ -121,6 +121,13 @@ class Study(models.Model):
                                  related_name="completed",
                                  blank=True)
 
+    compensated = models.ManyToManyField(User,
+                                 related_name="compensated",
+                                 blank=True)
+
+    max_participants = models.PositiveSmallIntegerField(default=50, blank=True)
+
+
     completion_code = models.TextField(max_length=32)
 
     survey_url = models.URLField(max_length=200)
@@ -134,8 +141,6 @@ class Study(models.Model):
     # years of experience
     min_yoe = models.PositiveSmallIntegerField(default=0, blank=True)
     max_yoe = models.PositiveSmallIntegerField(default=150, blank=True)
-
-    max_nop = models.PositiveSmallIntegerField(default=1, blank=True)
 
     req_edu = models.CharField(max_length=7,
                                 choices=LevelOfEducation.choices,
@@ -173,11 +178,15 @@ class Study(models.Model):
 # Extending User Model Using a One-To-One Link
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # avatar = models.ImageField(default='/static/pfp_participant.png')
+
+    # false until the user manually updates their profile
+    updated_once = models.BooleanField(default=False)
+
     bio = models.TextField(max_length=200)
     age = models.PositiveSmallIntegerField(default=18)
-    years_of_experience = models.PositiveSmallIntegerField(default=0)
+
     balance = models.DecimalField(default=0, max_digits=USD_MAX_DIGITS, decimal_places=USD_DECIMAL_NUM)
+
     country_of_origin = CountryField(default="US", blank_label='(Select Country)')
     current_location = CountryField(default="US", blank_label='(Select Country)')
 
@@ -193,6 +202,9 @@ class Profile(models.Model):
     occupation = models.CharField(max_length=5,
                                   choices=Occupation.choices,
                                   default=Occupation.STUDENT)
+    # experience with occupation
+    years_of_experience = models.PositiveSmallIntegerField(default=0)
+
 
 
     # Adds race and ethnicity as a choosable field for the user profile
@@ -220,6 +232,9 @@ class Profile(models.Model):
                                     default=EmailOptIn.NO)
 
     def can_enroll(self, study):
+        if self.updated_once == False:
+            return False
+
         expiry_with_time = datetime(
               year=study.expiry_date.year,
               month=study.expiry_date.month,
@@ -253,7 +268,7 @@ class Profile(models.Model):
            self.open_source_experience == 'N':
            return False
 
-        if study.enrolled.count() >= study.max_nop:
+        if study.enrolled.count() >= study.max_participants:
             return False
 
 

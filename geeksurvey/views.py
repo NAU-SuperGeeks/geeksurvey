@@ -17,7 +17,14 @@ from .models import Study, Profile
 from .forms import *
 
 def index(request):
-    return render(request, 'home.html')
+    if request.user.is_authenticated:
+      profile = Profile.objects.get(user=request.user)
+      context = {
+          'profile': profile,
+        }
+    else:
+      context = {}
+    return render(request, 'home.html', context)
 
 def working(request):
     return render(request, 'working.html')
@@ -36,9 +43,11 @@ def participate(request):
         elif request.user in study.enrolled.all():
             enrolled_studies.append(study)
 
+    profile = Profile.objects.get(user=request.user)
     context = {
         'enrolled_studies':enrolled_studies,
         'completed_studies':completed_studies,
+        'profile': profile,
       }
 
     return render(request, 'participate/index.html', context)
@@ -55,6 +64,7 @@ def part_discover(request):
 
     context = {
         'studies': eligible_studies,
+        'profile': user_profile,
       }
     return render(request, 'participate/discover.html', context)
 
@@ -87,7 +97,10 @@ def profile_update(request):
                                    instance=request.user.profile)
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
-            p_form.save()
+            new_profile = p_form.save(commit=False)
+            new_profile.updated_once = True
+            new_profile.save()
+
             messages.success(request, f'Your account has been updated!')
             return redirect('profile') # Redirect back to profile page
 

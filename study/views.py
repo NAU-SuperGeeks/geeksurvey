@@ -61,9 +61,75 @@ def study_create(request):
         return render(request, 'study/update.html', context)
 
 @login_required
+def study_participants(request, study_id):
+    study = get_object_or_404(Study, pk=study_id)
+
+    if request.user != study.owner:
+        return HttpResponse(status=401)
+
+    if request.method == 'POST':
+        action = request.POST['action']
+        username = request.POST['username']
+
+        user = get_object_or_404(User, username=username)
+
+        if action == "remove":
+            if user in study.enrolled.all():
+                study.enrolled.remove(user)
+            if user in study.completed.all():
+                study.completed.remove(user)
+            if user in study.compensated.all():
+                study.compensated.remove(user)
+
+            study.save()
+
+        elif action == "approve":
+            # assert study has proper funds
+            # and the user is enrolled and completed
+            #   but not compensated
+            if study.balance >= study.compensation and \
+               user in study.enrolled.all() and \
+               user in study.completed.all() and \
+               user not in study.compensated.all():
+
+                profile = get_object_or_404(Profile, user=user)
+
+                study.balance = round(float(study.balance) - float(study.compensation), 2)
+                profile.balance = round(float(profile.balance) + float(study.compensation), 2)
+
+                study.compensated.add(user)
+
+                study.save()
+                profile.save()
+
+    # sort participants to put actionable participants at the top
+    sorted_parts = []
+    all_parts = study.enrolled.all()
+    for part in all_parts:
+      if part in study.completed.all() and \
+         part not in study.compensated.all():
+          sorted_parts.append(part)
+    for part in all_parts:
+      if part not in sorted_parts and \
+          part in study.completed.all():
+          sorted_parts.append(part)
+    for part in all_parts:
+      if part not in sorted_parts:
+          sorted_parts.append(part)
+
+    context = { 'study':study,
+                'parts':sorted_parts
+              }
+    return render(request, 'study/participants.html', context)
+
+
+@login_required
 def study_delete(request, study_id):
     study = get_object_or_404(Study, pk=study_id)
     owner_profile = Profile.objects.get(user=study.owner)
+
+    if request.user != study.owner:
+        return HttpResponse(status=401)
 
     if request.method == 'POST':
         study.delete()
@@ -80,7 +146,7 @@ def study_delete(request, study_id):
 @login_required
 def study_funds(request, study_id):
     study = Study.objects.get(id=study_id)
-    if (request.user != study.owner):
+    if request.user != study.owner:
         return HttpResponse(status=401)
 
     profile = Profile.objects.get(user=request.user)
@@ -172,21 +238,12 @@ def study_complete(request, study_id):
     if request.method == 'POST':
         study = get_object_or_404(Study, pk=study_id)
 
-        # assert study has proper funds
-        if study.balance < study.compensation:
-            # TODO use messages to show user why they couldn't complete
-            # exit before completing
-            return redirect('study_landing_page', study_id)
-
         complete_form = StudyCompleteForm(request.POST)
 
         if complete_form.is_valid():
             code_input = complete_form.cleaned_data['completion_code']
             if code_input == study.completion_code:
                 profile = Profile.objects.get(user=request.user)
-
-                study.balance = round(float(study.balance) - float(study.compensation), 2)
-                profile.balance = round(float(profile.balance) + float(study.compensation), 2)
 
                 study.completed.add(request.user)
                 study.save()
@@ -204,3 +261,4 @@ def study_complete(request, study_id):
         complete_form = StudyCompleteForm(instance=study)
         context = {'study':study, 'complete_form':complete_form}
         return render(request, 'study/complete.html', context)
+

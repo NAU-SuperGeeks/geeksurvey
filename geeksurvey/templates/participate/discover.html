@@ -8,9 +8,19 @@
 
 {% block content %}
 
-  <h2> Studies </h2>
+  <h2> Study Discovery </h2>
 
   <div class="card-group">
+  {% if studies|length == 0 %}
+    <p class="text-secondary" style="margin-left:3em;">
+    {% if profile != None and not profile.updated_once %}
+      <span class="badge bg-warning">!</span>
+      You need to complete your profile before you can enroll in studies!
+    {% else %}
+      Look's like there's nothing here!
+    {% endif %}
+    </p>
+  {% endif %}
   {% for study in studies %}
 
       <div class="card" style="max-width: 18rem;">

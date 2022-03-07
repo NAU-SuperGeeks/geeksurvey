@@ -5,6 +5,12 @@
 {% block extra_head %}
   <meta name="description" content="Create groundbreaking studies with GeekSurvey! View and edit your existing studies."/>
   <meta name="author" content="SuperGeeks Team"/>
+
+  <style>
+    .study-links > .row > .btn {
+      margin:2px;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
@@ -14,21 +20,46 @@
   <hr>
   <h3> Your Studies </h3>
 
+  {% if studies|length == 0 %}
+    <p class="text-secondary" style="margin-left:3em;">
+      Look's like there's nothing here!
+    </p>
+  {% endif %}
   <div class="card-group">
   {% for study in studies %}
 
     <div class="card" style="max-width: 18rem;">
-      <img src="{% static 'books.png' %}" class="card-img-top" />
       <div class="card-body">
-        <h5 class="card-title">{{study.title}}</h5>
+        <h5 class="card-title">
+          {{study.title}}
+
+        </h5>
         <p class="card-text">{{study.description}} </p>
-        <p class="card-text">${{study.balance}} </p>
-        <a href="{% url 'study_landing_page' study.id %}" class="btn btn-secondary">View</a>
-        <a href="{% url 'study_edit' study.id %}" class="btn btn-primary">Edit</a>
-        <br>
-        <a style="margin-top:5px;" href="{% url 'study_funds' study.id %}" class="btn btn-success">Manage Funds</a>
-        <br>
-        <a style="margin-top:5px;" href="{% url 'study_delete' study.id %}" class="btn btn-danger">Delete</a>
+        <hr>
+        <p class="card-text">Balance: ${{study.balance}} </p>
+        <p class="card-text">Enrolled:  {{study.enrolled.all|length}}/{{study.max_participants}} </p>
+        <p class="card-text">Completed:  {{study.completed.all|length}}/{{study.enrolled.all|length}} </p>
+        
+
+
+        <div class="container study-links">
+          <div class="row">
+            <a href="{% url 'study_landing_page' study.id %}" class="col-sm btn btn-secondary">View</a>
+            <a href="{% url 'study_edit' study.id %}" class="col-sm btn btn-secondary">Edit</a>
+          </div>
+          <div class="row">
+            <a href="{% url 'study_funds' study.id %}" class="col-sm btn btn-secondary">Funds</a>
+            <a href="{% url 'study_participants' study.id %}" class="col-sm btn btn-secondary">
+              Participants
+              {% if study.completed.all|length != study.compensated.all|length %}
+                <span class="badge bg-warning">! </span>
+              {% endif %}
+            </a>
+          </div>
+          <div class="row">
+            <a href="{% url 'study_delete' study.id %}" class="btn btn-danger">Delete</a>
+          </div>
+        </div>
       </div>
     </div>
 

@@ -1,6 +1,7 @@
 Django==3.2.9
 django-allauth
 django-crispy-forms
+crispy_bootstrap5
 django-countries
 django-paypal
 python-decouple
