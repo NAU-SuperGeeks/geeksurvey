@@ -18,6 +18,9 @@
         <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
           {% if user.is_authenticated %}
             @{{ user.username }}
+              {% if profile != None and not profile.updated_once %}
+                <span class="badge bg-warning">!</span>
+              {% endif %}
           {% else %}
             Profile
           {% endif %}

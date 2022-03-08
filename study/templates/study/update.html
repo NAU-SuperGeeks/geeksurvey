@@ -4,19 +4,12 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h1> Create/Update A Study </h1>
+<h1> Study Form </h1>
 
-<h2 >{{ user.username }}</h2>
-
-<form method="POST" enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data" style="max-width:80%;margin:1em;">
 {% csrf_token %}
-<fieldset class="form-group">
-    <legend class="border-bottom mb-4">Study Info</legend>
-    {{ study_form|crispy }} <!-- Study Form -->
-</fieldset>
-<div class="form-group">
-    <button class="btn btn-outline-info" type="submit">Submit</button>
-</div>
+  {% crispy study_form %}
+</form>
 
 
 {% endblock %}

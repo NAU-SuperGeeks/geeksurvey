@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block extra_head %}
+  <style>
+    form {
+      display:inline;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<h1> Manage Study Participants </h1>
+
+<h2 class="text-primary">
+<span class="badge bg-success"> ${{study.balance}}</span>
+{{study.title}}
+</h2>
+<br>
+
+<div class="container-fluid">
+<div class="row border">
+
+  <div class="col-sm-2 border">
+      <span class="badge bg-primary">C</span> (completed)
+      <br>
+      <span class="badge bg-success">$</span> (compensated)
+  </div>
+
+  <div class="col-sm-2 border">
+      <strong> Username </strong>
+  </div>
+  <div class="col-sm-8 border">
+      <strong> Actions </strong> *warning, these are irreverable
+  </div>
+
+</div>
+
+{% for part in parts %}
+
+  <div class="row border">
+
+    <div class="col-sm-2">
+      {% if part in study.completed.all %}
+        <span class="badge bg-primary">C</span>
+      {% endif %}
+
+      {% if part in study.compensated.all %}
+        <span class="badge bg-success">$</span>
+      {% endif %}
+    </div>
+
+    <div class="col-sm-2">
+      <a href="{% url 'profile_view' part %}" class="link-secondary col-sm-2" style="text-decoration:none;">
+        @{{ part }}
+      </a>
+    </div>
+
+    <form class="col-sm-2" action="{% url 'study_participants' study.id %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="username" value="{{part}}">
+        <input type="hidden" name="action" value="remove">
+        <input style="display:inline;" class="btn btn-outline-danger" type="submit" value="Remove">
+    </form>
+
+    {% if part in study.completed.all and part not in study.compensated.all %}
+      <form class="col-sm-2" action="{% url 'study_participants' study.id %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="username" value="{{part}}">
+          <input type="hidden" name="action" value="approve">
+          <input class="btn btn-outline-success" type="submit" value="Approve ${{study.compensation}}">
+      </form>
+    {% endif %}
+
+  </div>
+
+{% endfor %}
+</div>
+
+<p> TOTAL: {{study.enrolled.all|length}}/{{study.max_participants}}</p>
+
+{% endblock %}
+

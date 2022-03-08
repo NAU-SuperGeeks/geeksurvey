@@ -13,6 +13,11 @@
   <hr>
   <h3> Your Enrolled Studies </h3>
 
+  {% if enrolled_studies|length == 0 %}
+    <p class="text-secondary" style="margin-left:3em;">
+      Look's like there's nothing here!
+    </p>
+  {% endif %}
   {% for study in enrolled_studies %}
 
     <p>
@@ -26,6 +31,11 @@
   <hr>
   <h3> Your Completed Studies </h3>
 
+  {% if completed_studies|length == 0 %}
+    <p class="text-secondary" style="margin-left:3em;">
+      Look's like there's nothing here!
+    </p>
+  {% endif %}
   {% for study in completed_studies %}
 
     <p>
