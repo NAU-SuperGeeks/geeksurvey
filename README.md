@@ -20,6 +20,9 @@ These instructions will get you a copy of the project up and running on your loc
 2. TODO
 3. TODO
 
+### Testing
+```python manage.py test```
+
 ## Deployment
 
 TODO: Discuss NAU ITS and geeksurvey(dot)xyz deployment, as well as how to deploy elsewhere.
