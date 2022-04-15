@@ -37,7 +37,7 @@ def fund(request):
     profile = Profile.objects.get(user=request.user)
 
     paypal_dict = {
-            "business": config('PAYPAL_BIZ_EMAIL'),
+            "business": config('PAYPAL_BIZ_EMAIL', default=""),
             "amount": payment.amount,
             "currency_code": "USD",
             "item_name": 'Fund GeekSurvey Account',
@@ -93,8 +93,8 @@ def claim(request):
         PAYOUT_URL = "https://api.sandbox.paypal.com/v1/payments/payouts"
         TOKEN_URL = "https://api-m.sandbox.paypal.com/v1/oauth2/token"
         
-        CLIENT_ID = config("PAYPAL_CLIENT_ID")
-        CLIENT_SECRET = config("PAYPAL_CLIENT_SECRET")
+        CLIENT_ID = config("PAYPAL_CLIENT_ID", default="")
+        CLIENT_SECRET = config("PAYPAL_CLIENT_SECRET", default="")
 
         profile = Profile.objects.get(user=request.user)
 

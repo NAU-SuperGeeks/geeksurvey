@@ -16,7 +16,7 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool( int( config("GEEKSURVEY_DEBUG") ) )
+DEBUG = bool( int( config("GEEKSURVEY_DEBUG", default="1") ) )
 print("DEBUG  : " + str(DEBUG))
 
 # email config
@@ -25,8 +25,8 @@ if DEBUG:
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = config("GMAIL_APP_USERNAME")
-EMAIL_HOST_PASSWORD = config("GMAIL_APP_PASSWORD")
+EMAIL_HOST_USER = config("GMAIL_APP_USERNAME", default="")
+EMAIL_HOST_PASSWORD = config("GMAIL_APP_PASSWORD", default="")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'GeekSurvey Dev'
@@ -48,8 +48,8 @@ LOGOUT_REDIRECT_URL = 'home'
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': config('GOOGLE_AUTH_CLIENT'),
-            'secret': config('GOOGLE_AUTH_SECRET'),
+            'client_id': config('GOOGLE_AUTH_CLIENT', default=""),
+            'secret': config('GOOGLE_AUTH_SECRET', default=""),
             'key': ''
         },
         'SCOPE': [
@@ -62,8 +62,8 @@ SOCIALACCOUNT_PROVIDERS = {
     },
     'github': {
         'APP': {
-            'client_id': config('GITHUB_AUTH_CLIENT'),
-            'secret': config('GITHUB_AUTH_SECRET'),
+            'client_id': config('GITHUB_AUTH_CLIENT', default=""),
+            'secret': config('GITHUB_AUTH_SECRET', default=""),
             'key': ''
         },
         'SCOPE': [
@@ -80,7 +80,7 @@ SOCIALACCOUNT_PROVIDERS = {
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("GEEKSURVEY_SECRET_KEY")
+SECRET_KEY = config("GEEKSURVEY_SECRET_KEY", default="overwriteme")
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
