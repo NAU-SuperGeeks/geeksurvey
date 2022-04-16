@@ -14,7 +14,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 
-1. ```git clone <this repo>``` ``cd <this repo>```
+1. ```git clone <this repo>``` ```cd <this repo>```
 2. ```pip install requirements.txt```
 3. ```python manage.py makemigrations geeksurvey```
 3. ```python manage.py migrate```
