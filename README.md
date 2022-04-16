@@ -39,23 +39,23 @@ Typically, various credentials for these APIs are stored in a .env file at the r
 
 To deploy GeekSurvey to a server, a .env file must be in the project root containing:
 1. A valid Django secret key used for encryption
-  - GEEKSURVEY_SECRET_KEY
-2. A debug flag set to false (1) for deployment
-  - GEEKSURVEY_DEBUG
+  - ```GEEKSURVEY_SECRET_KEY = "some_data"```
+2. A debug flag set to false (0) for deployment
+  - ```GEEKSURVEY_DEBUG = 0```
 3. Valid Gmail App credentials for email
-  - GMAIL_APP_USERNAME
-  - GMAIL_APP_PASSWORD
+  - ```GMAIL_APP_USERNAME = "user@gmail.com"```
+  - ```GMAIL_APP_PASSWORD = "sample-app-password"```
 4. Valid Google App credentials for OAuth
-  - GOOGLE_AUTH_CLIENT
-  - GOOGLE_AUTH_SECRET
+  - ```GOOGLE_AUTH_CLIENT = "some_data"```
+  - ```GOOGLE_AUTH_SECRET = "some_data"```
 5. Valid GitHub App credentials for OAuth
-  - GITHUB_AUTH_CLIENT
-  - GITHUB_AUTH_SECRET
+  - ```GITHUB_AUTH_CLIENT = "some_data"```
+  - ```GITHUB_AUTH_SECRET = "some_data"```
 6. Valid PayPal Developer credentials for all payments
-  - PAYPAL_CLIENT_ID
-  - PAYPAL_CLIENT_SECRET
+  - ```PAYPAL_CLIENT_ID = "some_data"```
+  - ```PAYPAL_CLIENT_SECRET = "some_data"```
 6. Valid PayPal Business account credentials for paying out to users
-  - PAYPAL_BIZ_ACCOUNT
+  - ```PAYPAL_BIZ_ACCOUNT = "user@example.com"```
 
 GeekSurvey can be published on the web by configuring nginx and gunicorn to run the project through a WSGI. [Here](https://www.youtube.com/watch?v=YnrgBeIRtvo) is a good reference for working through this process.
 
@@ -64,11 +64,6 @@ Take care to host the static files separately to support caching. This requires
 to collect the static files into a single folder.
 
 GeekSurvey will fail if it is not hosted with HTTPS, so make sure your domain name is certified and your nginx config uses SSL.
-
-
-## Testing
-To run GeekSurvey tests, do:
-```python manage.py test```
 
 ## Contributing
 
