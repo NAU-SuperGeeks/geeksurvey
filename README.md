@@ -10,7 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-- Must have a machine with python3 and pip package manager
+- Must have a machine with git, python3, and pip
 
 ### Installing
 
