@@ -18,6 +18,7 @@ def study_custom_labels(study_form):
     study_form['req_rne'].label = "Required Race / Ethnicity"
     study_form['req_sex'].label = "Required Gender"
     study_form['req_oss'].label = "Require Experience With Open Source Development?"
+    study_form['req_git'].label = "Require Github OAuth accounts?"
 
 def study_send_mail(request, study):
     all_users = User.objects.all()

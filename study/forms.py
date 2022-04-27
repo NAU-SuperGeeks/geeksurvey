@@ -59,7 +59,8 @@ class StudyUpdateForm(forms.ModelForm):
               'req_edu',
               'req_rne',
               'req_sex',
-              'req_oss'), active=False),
+              'req_oss',
+              'req_git'), active=False),
               Submit('submit', 'Submit')
         )
 
