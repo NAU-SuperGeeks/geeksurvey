@@ -78,10 +78,6 @@ class RaceAndEthnicity(models.TextChoices):
     INDIGENOUS             = 'I', _('Indigenous')
     PREFER_NOT_TO_SAY_IDK  = 'PNTSIDK', _('Prefer Not to Say or I Don\'t Know')
 
-class OpenSourceExperience(models.TextChoices):
-    YES = 'Y', _('Yes')
-    NO  = 'N', _('No')
-
 # Available choices based on 2021 Stack Overflow Developer Survey
 class Gender(models.TextChoices):
     NONE                   = '',   _('')
@@ -90,7 +86,7 @@ class Gender(models.TextChoices):
     NONBINARY_GENDERQUEER_GENDER_NONCONFORMING = 'NGGN', _('Non-binary/Genderqueer/Gender Non-conforming')
     PREFER_NOT_TO_SAY                          = 'PNTS', _('Prefer Not to Say')
 
-class EmailOptIn(models.TextChoices):
+class BooleanChoices(models.TextChoices):
     YES = 'Y', _('Yes')
     NO  = 'N', _('No')
 
@@ -161,9 +157,16 @@ class Study(models.Model):
                                 choices=Gender.choices,
                                 default=Gender.NONE,
                                 blank=True)
+
+    # require open source experience?
     req_oss = models.CharField(max_length=7,
-                                choices=OpenSourceExperience.choices,
-                                default=OpenSourceExperience.NO)
+                                choices=BooleanChoices.choices,
+                                default=BooleanChoices.NO)
+
+    # require github auth account?
+    req_git = models.CharField(max_length=7,
+                                choices=BooleanChoices.choices,
+                                default=BooleanChoices.NO)
 
     # TODO required country
 
@@ -216,8 +219,8 @@ class Profile(models.Model):
 
     # Adds open source experience as a choosable field for the user profile
     open_source_experience = models.CharField(max_length=1,
-                                              choices=OpenSourceExperience.choices,
-                                              default=OpenSourceExperience.NO)
+                                              choices=BooleanChoices.choices,
+                                              default=BooleanChoices.NO)
 
 
     # Adds gender as a choosable field for the user profile
@@ -228,9 +231,18 @@ class Profile(models.Model):
 
     # Adds email communication preference as a choosable field for the user profile.
     email_opt_in = models.CharField(max_length=1,
-                                    choices=EmailOptIn.choices,
-                                    default=EmailOptIn.NO)
+                                    choices=BooleanChoices.choices,
+                                    default=BooleanChoices.NO)
 
+    # record if authenticated by GitHub
+    # if applicable, this gets set to True in .signals.py
+    is_auth_by_github = models.BooleanField(default=False)
+
+    
+    # used to enforce enrollment criteria across the web application
+    #   used for sending emails
+    #            populated study discovery page
+    #            actual enrollment
     def can_enroll(self, study):
         if self.updated_once == False:
             return False
@@ -266,6 +278,10 @@ class Profile(models.Model):
 
         if study.req_oss == 'Y' and \
            self.open_source_experience == 'N':
+           return False
+
+        if study.req_git == 'Y' and \
+           not self.is_auth_by_github:
            return False
 
         if study.enrolled.count() >= study.max_participants:
