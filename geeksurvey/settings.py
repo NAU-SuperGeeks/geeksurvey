@@ -86,6 +86,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     'geeksurvey.xyz',
+    'www.geeksurvey.xyz',
 ]
 
 # Application definition
